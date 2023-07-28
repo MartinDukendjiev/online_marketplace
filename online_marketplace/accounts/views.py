@@ -1,16 +1,17 @@
 from django.contrib.auth import login, get_user_model
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LogoutView, LoginView
 from django.templatetags.static import static
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse_lazy
 from django.views.generic import DetailView, CreateView, UpdateView, DeleteView
+
+from online_marketplace.accounts.forms import RegisterUserForm
 
 UserModel = get_user_model()
 
 
 class UserRegisterView(CreateView):
-    form_class = UserCreationForm
+    form_class = RegisterUserForm
     template_name = 'accounts/register.html'
     success_url = reverse_lazy('index')
 
@@ -61,3 +62,4 @@ class ProfileEditView(LoginRequiredMixin, UpdateView):
 class ProfileDeleteView(LoginRequiredMixin, DeleteView):
     model = UserModel
     template_name = 'accounts/profile-delete-page.html'
+    success_url = reverse_lazy('index')

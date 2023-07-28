@@ -6,17 +6,36 @@ from django.db import models
 
 
 class MarketplaceUser(AbstractUser):
-    avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
-    average_rating = models.DecimalField(max_digits=3, decimal_places=2, default=0)
+    avatar = models.ImageField(
+        upload_to='avatars/',
+        null=True,
+        blank=True
+    )
+    average_rating = models.DecimalField(
+        max_digits=3,
+        decimal_places=2,
+        default=0
+    )
 
     def __str__(self):
         return self.username
 
 
 class Rating(models.Model):
-    reviewer = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='given_ratings', on_delete=models.CASCADE)
-    receiver = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='received_ratings', on_delete=models.CASCADE)
-    value = models.DecimalField(max_digits=3, decimal_places=2)
+    reviewer = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        related_name='given_ratings',
+        on_delete=models.CASCADE
+    )
+    receiver = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        related_name='received_ratings',
+        on_delete=models.CASCADE
+    )
+    value = models.DecimalField(
+        max_digits=3,
+        decimal_places=2
+    )
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
