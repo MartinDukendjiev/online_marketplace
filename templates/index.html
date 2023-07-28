@@ -1,0 +1,15 @@
+
+
+{% block content %}
+  <h1>Welcome to our Online Marketplace!</h1>
+  <p>This is the place to buy and sell your items. Start exploring now!</p>
+  
+  {% if user.is_authenticated %}
+    <a href="{% url 'profile details' user.pk %}">My Profile</a>
+    <a href="{% url 'logout user' %}">Logout</a>
+  {% else %}
+    <a href="{% url 'login user' %}">Login</a>
+    <a href="{% url 'register user' %}">Register</a>
+  {% endif %}
+
+{% endblock %}
