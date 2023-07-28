@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Product Details</title>
+</head>
+<body>
+    <h1>{{ product.name }}</h1>
+    <img src="{{ product.image }}" alt="{{ product.name }}">
+    <p>{{ product.description }}</p>
+    <p>{{ product.price }}</p>
+    <p>Posted by: {{ product.user.username }}</p>
+    <p>Phone: {{ product.phone }}</p>
+    <p>Location: {{ product.location }}</p>
+    <p>Category: {{ product.category }}</p>
+    <p>Subcategory: {{ product.subcategory }}</p>
+    <p>Product State: {{ product.state }}</p>
+    <p>Posted at: {{ product.posted_at }}</p>
+    <!-- Add more product details as you like -->
+
+    {% if request.user == product.user %}
+        <a href="{% url 'product update' product.id %}">Edit</a>
+        <a href="{% url 'product delete' product.id %}">Delete</a>
+    {% endif %}
+</body>
+</html>

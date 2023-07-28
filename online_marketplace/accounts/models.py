@@ -47,3 +47,13 @@ class Rating(models.Model):
 
     def __str__(self):
         return f'{self.reviewer.username} rated {self.receiver.username}'
+
+
+class Comment(models.Model):
+    user = models.ForeignKey(MarketplaceUser, on_delete=models.CASCADE)
+    seller_profile = models.ForeignKey(MarketplaceUser, related_name='comments_received', on_delete=models.CASCADE)
+    text = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'Comment by {self.user.username} on {self.seller_profile.username} profile'

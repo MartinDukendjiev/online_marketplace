@@ -1,0 +1,10 @@
+{% for product in products %}
+    <div>
+        <h2>{{ product.name }}</h2>
+        <img src="{{ product.image}}" alt="{{ product.name }}">
+        <p>{{ product.description }}</p>
+        <p>{{ product.price }}</p>
+        <!-- Add more product details as you like -->
+        <a href="{% url 'product details' product.id %}">View details</a>
+    </div>
+{% endfor %}

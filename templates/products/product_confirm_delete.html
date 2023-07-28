@@ -1,0 +1,7 @@
+{% if request.user == product.user %}
+    <a href="{% url 'product update' product.id %}">Edit</a>
+    <form method="POST" action="{% url 'product delete' product.id %}" style="display:inline;">
+        {% csrf_token %}
+        <input type="submit" value="Delete">
+    </form>
+{% endif %}

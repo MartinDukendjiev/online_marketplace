@@ -1,15 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Online Marketplace</title>
+</head>
+<body>
+    <h1>Welcome to the Online Marketplace!</h1>
+    <ul>
+        <li><a href="{% url 'register user' %}">Register</a></li>
+        <li><a href="{% url 'login user' %}">Login</a></li>
+        <li><a href="{% url 'logout user' %}">Logout</a></li>
+        <li><a href="{% url 'profile details' user.pk %}">Profile</a></li>
+        <li><a href="{% url 'product list' %}">Product List</a></li>
+        <li><a href="{% url 'product create' %}">Create Product</a></li>
 
-
-{% block content %}
-  <h1>Welcome to our Online Marketplace!</h1>
-  <p>This is the place to buy and sell your items. Start exploring now!</p>
-  
-  {% if user.is_authenticated %}
-    <a href="{% url 'profile details' user.pk %}">My Profile</a>
-    <a href="{% url 'logout user' %}">Logout</a>
-  {% else %}
-    <a href="{% url 'login user' %}">Login</a>
-    <a href="{% url 'register user' %}">Register</a>
-  {% endif %}
-
-{% endblock %}
+    </ul>
+</body>
+</html>
