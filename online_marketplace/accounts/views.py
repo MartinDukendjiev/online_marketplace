@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LogoutView, LoginView
 from django.templatetags.static import static
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.views.generic import DetailView, CreateView, UpdateView, DeleteView
 
 UserModel = get_user_model()
@@ -52,15 +52,12 @@ class ProfileDetailView(LoginRequiredMixin, DetailView):
         return self.profile_image
 
 
-class ProfileEditView(UpdateView):
+class ProfileEditView(LoginRequiredMixin, UpdateView):
     model = UserModel
     template_name = 'accounts/profile-edit-page.html'
     fields = ['first_name', 'last_name', 'email']
-    success_url = ''
 
 
-class ProfileDeleteView(DeleteView):
+class ProfileDeleteView(LoginRequiredMixin, DeleteView):
     model = UserModel
     template_name = 'accounts/profile-delete-page.html'
-
-

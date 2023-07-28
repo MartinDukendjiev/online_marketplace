@@ -64,7 +64,7 @@ WSGI_APPLICATION = 'online_marketplace.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'online_marketplace_db',
+        'NAME': 'marketplace_db_1',
         'USER': 'postgres-user',
         'PASSWORD': 'Taralej',
         'HOST': '127.0.0.1',
@@ -119,6 +119,7 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+AUTH_USER_MODEL = 'accounts.MarketplaceUser'
 
 LOGIN_REDIRECT_URL = reverse_lazy('index')
 LOGOUT_REDIRECT_URL = reverse_lazy('login user')
