@@ -48,8 +48,6 @@ def add_user_groups(sender, **kwargs):
     content_types = [content_type_product, content_type_category, content_type_subcategory]
     staff_permissions = Permission.objects.filter(content_type__in=content_types)
 
-    # only have permission to this models
-
     superuser_group, created = Group.objects.get_or_create(name='Superuser')
     if created:
         superuser_group.permissions.set(superuser_permissions)
