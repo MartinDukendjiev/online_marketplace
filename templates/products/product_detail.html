@@ -14,9 +14,7 @@
     <p>Location: {{ product.location }}</p>
     <p>Category: {{ product.category }}</p>
     <p>Subcategory: {{ product.subcategory }}</p>
-    <p>Product State: {{ product.state }}</p>
-    <p>Posted at: {{ product.posted_at }}</p>
-    <!-- Add more product details as you like -->
+    <p>Posted at: {{ product.upload_date }}</p>
 
     {% if request.user == product.user %}
         <a href="{% url 'product update' product.id %}">Edit</a>

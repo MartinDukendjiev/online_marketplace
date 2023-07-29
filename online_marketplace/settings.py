@@ -22,7 +22,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'online_marketplace.accounts',
+    'online_marketplace.accounts.apps.AccountsConfig',
     'online_marketplace.products',
 ]
 
@@ -123,3 +123,15 @@ AUTH_USER_MODEL = 'accounts.MarketplaceUser'
 
 LOGIN_REDIRECT_URL = reverse_lazy('index')
 LOGOUT_REDIRECT_URL = reverse_lazy('login user')
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+EMAIL_HOST_USER = 'goodsspoter@gmail.com'
+EMAIL_HOST_PASSWORD = 'rxzyoybddtjtwtmp'
+
+# Optional: To use a custom display name for sending emails
+EMAIL_FROM = 'GoodsSpotter'

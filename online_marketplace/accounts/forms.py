@@ -9,7 +9,7 @@ UserModel = get_user_model()
 class RegisterUserForm(auth_forms.UserCreationForm):
     class Meta:
         model = UserModel
-        fields = ('username', 'password1', 'password2')
+        fields = ('username', 'email', 'password1', 'password2')
 
     def save(self, commit=True):
         result = super().save(commit)

@@ -10,7 +10,10 @@
         <li><a href="{% url 'register user' %}">Register</a></li>
         <li><a href="{% url 'login user' %}">Login</a></li>
         <li><a href="{% url 'logout user' %}">Logout</a></li>
-        <li><a href="{% url 'profile details' user.pk %}">Profile</a></li>
+        {% if user.is_authenticated %}
+            <li><a href="{% url 'profile details' user.pk %}">Profile</a></li>
+        {% endif %}
+
         <li><a href="{% url 'product list' %}">Product List</a></li>
         <li><a href="{% url 'product create' %}">Create Product</a></li>
 

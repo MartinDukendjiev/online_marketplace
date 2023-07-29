@@ -20,6 +20,9 @@ class MarketplaceUser(AbstractUser):
     def __str__(self):
         return self.username
 
+    def save(self, *args, **kwargs):
+        result = super().save(*args, **kwargs)
+
 
 class Rating(models.Model):
     reviewer = models.ForeignKey(
