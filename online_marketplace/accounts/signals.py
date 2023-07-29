@@ -1,11 +1,14 @@
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Group, Permission
+from django.contrib.contenttypes.models import ContentType
 from django.core.mail import send_mail
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, post_migrate
 from django.dispatch import receiver
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 
 from online_marketplace import settings
+from online_marketplace.products.models import Product, Category, SubCategory
 
 UserModel = get_user_model()
 
@@ -32,3 +35,25 @@ def sand_successful_registration_email(user):
 def user_created(instance, created, **kwargs):
     if created:
         sand_successful_registration_email(instance)
+
+
+@receiver(post_migrate)
+def add_user_groups(sender, **kwargs):
+    superuser_permissions = Permission.objects.all()  # have all permissions
+
+    content_type_product = ContentType.objects.get(app_label='products', model='product')
+    content_type_category = ContentType.objects.get(app_label='products', model='category')
+    content_type_subcategory = ContentType.objects.get(app_label='products', model='subcategory')
+
+    content_types = [content_type_product, content_type_category, content_type_subcategory]
+    staff_permissions = Permission.objects.filter(content_type__in=content_types)
+
+    # only have permission to this models
+
+    superuser_group, created = Group.objects.get_or_create(name='Superuser')
+    if created:
+        superuser_group.permissions.set(superuser_permissions)
+
+    staff_group, created = Group.objects.get_or_create(name='Staff')
+    if created:
+        staff_group.permissions.set(staff_permissions)
