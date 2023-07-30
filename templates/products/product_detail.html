@@ -1,24 +1,34 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Product Details</title>
-</head>
-<body>
-    <h1>{{ product.name }}</h1>
-    <img src="{{ product.image }}" alt="{{ product.name }}">
-    <p>{{ product.description }}</p>
-    <p>{{ product.price }}</p>
-    <p>Posted by: {{ product.user.username }}</p>
-    <p>Phone: {{ product.phone }}</p>
-    <p>Location: {{ product.location }}</p>
-    <p>Category: {{ product.category }}</p>
-    <p>Subcategory: {{ product.subcategory }}</p>
-    <p>Posted at: {{ product.upload_date }}</p>
+{% extends 'base/base.html' %}
 
-    {% if request.user == product.user %}
-        <a href="{% url 'product update' product.id %}">Edit</a>
-        <a href="{% url 'product delete' product.id %}">Delete</a>
-    {% endif %}
-</body>
-</html>
+{% block content %}
+  <div class="container mt-4">
+    <div class="row">
+      <!-- Галерия с изображения или главна снимка -->
+      <div class="col-lg-6">
+        <img src="{{ product.image_url }}" class="img-fluid" alt="{{ product.name }}">
+      </div>
+      <!-- Информация за продукта -->
+      <div class="col-lg-6">
+        <h2>{{ product.name }}</h2>
+        <h4 class="text-muted">{{ product.price }} лв.</h4>
+        <p>{{ product.description }}</p>
+        <dl>
+          <dt>Категория:</dt>
+          <dd>{{ product.category }}</dd>
+          <dt>Подкатегория:</dt>
+          <dd>{{ product.subcategory }}</dd>
+        </dl>
+        <!-- Контакт с продавача -->
+        <button id="showPhoneNumber" class="btn btn-primary">Покажи телефонен номер</button>
+        <p id="phoneNumber" class="mt-2" style="display: none;">{{ product.phone_number }}</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('showPhoneNumber').addEventListener('click', function() {
+      document.getElementById('phoneNumber').style.display = 'block';
+      this.style.display = 'none'; // Скрива бутона след натискане
+    });
+  </script>
+{% endblock %}

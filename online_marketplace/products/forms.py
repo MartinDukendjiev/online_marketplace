@@ -1,5 +1,5 @@
 from django import forms
-from .models import Product
+from .models import Product, Category, SubCategory
 
 
 class ProductForm(forms.ModelForm):
@@ -27,3 +27,9 @@ class ProductUpdateForm(forms.ModelForm):
         if commit:
             product.save()
         return product
+
+
+class ProductSearchForm(forms.Form):
+    search = forms.CharField(required=False, widget=forms.TextInput(attrs={'placeholder': 'Търси продукт'}))
+    category = forms.ModelChoiceField(queryset=Category.objects.all(), required=False, empty_label="Изберете категория...")
+    subcategory = forms.ModelChoiceField(queryset=SubCategory.objects.all(), required=False, empty_label="Изберете подкатегория...")
