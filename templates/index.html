@@ -1,22 +1,32 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Online Marketplace</title>
-</head>
-<body>
-    <h1>Welcome to the Online Marketplace!</h1>
-    <ul>
-        <li><a href="{% url 'register user' %}">Register</a></li>
-        <li><a href="{% url 'login user' %}">Login</a></li>
-        <li><a href="{% url 'logout user' %}">Logout</a></li>
-        {% if user.is_authenticated %}
-            <li><a href="{% url 'profile details' user.pk %}">Profile</a></li>
-        {% endif %}
+{% extends 'base/base.html' %}
 
-        <li><a href="{% url 'product list' %}">Product List</a></li>
-        <li><a href="{% url 'product create' %}">Create Product</a></li>
-
-    </ul>
-</body>
-</html>
+{% block content %}
+    <div class="container">
+        <h1 class="mt-5">Списък с категории</h1>
+        <form method="get" class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="text" name="search" placeholder="Търсене..."
+                   aria-label="Търсене...">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Търси</button>
+        </form>
+        <hr>
+        <div class="row">
+            {% for category in categories %}
+                <div class="col-md-4">
+                    <div class="card mb-4 shadow-sm">
+                        <img src="{{ category.image }}" class="bd-placeholder-img card-img-top" width="100%"
+                             height="225">
+                        <div class="card-body">
+                            <p class="card-text">{{ category.name }}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="btn-group">
+                                    <a href="{% url 'product list' %}?category={{ category.id }}"
+                                       class="btn btn-sm btn-outline-secondary">Виж продукти</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock content %}

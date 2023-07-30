@@ -88,9 +88,3 @@ class ProductDeleteView(LoginRequiredMixin, DeleteView):
             raise Http404()
         return obj
 
-
-def product_list_view(request):
-    search_query = request.GET.get('search', '')
-    products = Product.objects.filter(name__icontains=search_query)
-    search_form = ProductSearchForm(request.GET or None)
-    return render(request, 'products/product_list.html', {'products': products, 'search_form': search_form})

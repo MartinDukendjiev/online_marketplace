@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="{% url 'index' %}">Online Marketplace</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -8,23 +8,23 @@
         <ul class="navbar-nav ml-auto">
             {% if user.is_authenticated %}
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'product list' %}">Goods</a>
+                    <a class="nav-link" href="{% url 'product list' %}">Обяви</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'product create' %}">Add product</a>
+                    <a class="nav-link" href="{% url 'product create' %}">Добави Обява</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'profile details' user.pk %}">{{ user.username }}</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'logout user' %}">Logout</a>
+                    <a class="nav-link" href="{% url 'logout user' %}">Излез</a>
                 </li>
             {% else %}
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'login user' %}">Login</a>
+                    <a class="nav-link" href="{% url 'login user' %}">Влез</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'register user' %}">Register</a>
+                    <a class="nav-link" href="{% url 'register user' %}">Регистрирай се.</a>
                 </li>
             {% endif %}
         </ul>
