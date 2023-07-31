@@ -8,7 +8,6 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 
 from online_marketplace import settings
-from online_marketplace.products.models import Product, Category, SubCategory
 
 UserModel = get_user_model()
 
@@ -22,7 +21,6 @@ def sand_successful_registration_email(user):
     plain_massage = strip_tags(html_message)  # removes tags and shows only the text of the HTML
 
     send_mail(
-
         subject='Successful Registration',
         message=plain_massage,
         html_message=html_message,

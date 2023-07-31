@@ -5,6 +5,7 @@ from django.utils import timezone
 
 class Category(models.Model):
     name = models.CharField(max_length=200)
+    image = models.ImageField(upload_to='static/categories/', null=True, blank=True)
 
     def __str__(self):
         return self.name

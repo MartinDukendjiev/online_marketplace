@@ -2,7 +2,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 
 from django.http import Http404
-from django.shortcuts import render
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
@@ -87,4 +86,3 @@ class ProductDeleteView(LoginRequiredMixin, DeleteView):
         if obj.user != self.request.user:
             raise Http404()
         return obj
-
