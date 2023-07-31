@@ -1,6 +1,6 @@
 from django.views.generic import TemplateView
 
-from online_marketplace.products.models import Category, SubCategory
+from online_marketplace.products.models import Category # SubCategory
 
 
 class IndexView(TemplateView):
@@ -13,5 +13,5 @@ class IndexView(TemplateView):
         if search_term:
             categories = categories.filter(name__icontains=search_term)
         context['categories'] = categories
-        context['subcategories'] = SubCategory.objects.all()
+        # context['subcategories'] = SubCategory.objects.all()
         return context

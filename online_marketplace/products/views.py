@@ -5,7 +5,7 @@ from django.http import Http404
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
-from online_marketplace.products.models import Product, Category, SubCategory
+from online_marketplace.products.models import Product, Category  # SubCategory
 from online_marketplace.products.forms import ProductForm, ProductUpdateForm, ProductSearchForm
 
 
@@ -18,7 +18,7 @@ class ProductListView(ListView):
         queryset = super().get_queryset()
         search_query = self.request.GET.get('search', '')
         category_query = self.request.GET.get('category', '')
-        subcategory_query = self.request.GET.get('subcategory', '')
+        # subcategory_query = self.request.GET.get('subcategory', '')
 
         if search_query:
             queryset = queryset.filter(Q(name__icontains=search_query) | Q(description__icontains=search_query))
@@ -26,8 +26,8 @@ class ProductListView(ListView):
         if category_query and category_query.isdigit():
             queryset = queryset.filter(category__id=category_query)
 
-        if subcategory_query and subcategory_query.isdigit():
-            queryset = queryset.filter(subcategory__id=subcategory_query)
+        # if subcategory_query and subcategory_query.isdigit():
+        #     queryset = queryset.filter(subcategory__id=subcategory_query)
 
         return queryset
 
@@ -35,7 +35,7 @@ class ProductListView(ListView):
         context = super().get_context_data(**kwargs)
         context['search_form'] = ProductSearchForm(self.request.GET)
         context['categories'] = Category.objects.all()
-        context['subcategories'] = SubCategory.objects.all()
+        # context['subcategories'] = SubCategory.objects.all()
         return context
 
 
@@ -58,7 +58,7 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['categories'] = Category.objects.all()
-        context['subcategories'] = SubCategory.objects.all()
+        # context['subcategories'] = SubCategory.objects.all()
         return context
 
 
