@@ -1,8 +1,40 @@
+{% extends 'base/base.html' %}
+
 {% block content %}
-  <h2>Edit Profile</h2>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Update</button>
-  </form>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+    <div class="container mt-5">
+        <h1 class="mb-4">Edit Profile</h1>
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="{{ form.first_name.id_for_label }}">{{ form.first_name.label }}</label>
+                    <input type="text" name="{{ form.first_name.name }}" class="form-control"
+                           id="{{ form.first_name.id_for_label }}"
+                           value="{{ form.first_name.value|default_if_none:'' }}">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="{{ form.last_name.id_for_label }}">{{ form.last_name.label }}</label>
+                    <input type="text" name="{{ form.last_name.name }}" class="form-control"
+                           id="{{ form.last_name.id_for_label }}" value="{{ form.last_name.value|default_if_none:'' }}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="{{ form.email.id_for_label }}">{{ form.email.label }}</label>
+                <input type="email" name="{{ form.email.name }}" class="form-control" id="{{ form.email.id_for_label }}"
+                       value="{{ form.email.value|default_if_none:'' }}">
+            </div>
+
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+            <a href="{% url 'profile details' profile.pk %}" class="btn btn-secondary">Cancel</a>
+
+            {% if user.is_authenticated and user == profile %}
+                <a href="{% url 'profile delete' profile.pk %}" class="btn btn-danger float-right">Delete
+                    Profile</a>
+            {% endif %}
+
+
+        </form>
+    </div>
 {% endblock %}

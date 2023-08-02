@@ -1,6 +1,6 @@
 from django.urls import path, include
 from .views import ProfileDetailView, UserRegisterView, UserLoginView, UserLogoutView, ProfileEditView, \
-    ProfileDeleteView
+    ProfileDeleteView, add_rating
 
 urlpatterns = [
     # localhost:8000/accounts/
@@ -10,6 +10,6 @@ urlpatterns = [
     path('profile/<int:pk>/', include([
         path('', ProfileDetailView.as_view(), name='profile details'),
         path('edit/', ProfileEditView.as_view(), name='profile edit'),
-        path('delete/', ProfileDeleteView.as_view(), name='profile delete')
+        path('delete/', ProfileDeleteView.as_view(), name='profile delete'),
     ]))
 ]

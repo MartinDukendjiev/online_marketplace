@@ -1,9 +1,15 @@
+{% extends 'base/base.html' %}
+
 {% block content %}
-  <h2>Delete Profile</h2>
-  <p>Are you sure you want to delete your profile?</p>
-  <form method="post">
-    {% csrf_token %}
-    <button type="submit">Yes, delete my profile</button>
-  </form>
-  <a href="{% url 'profile details' user.pk%}">No, take me back</a>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+<div class="container mt-5">
+    <h1 class="mb-4">Delete Profile</h1>
+    <p class="text-danger">Are you sure you want to delete your profile? This action cannot be undone.</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Yes, Delete My Profile</button>
+        <a href="{% url 'profile details' profile.pk %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
 {% endblock %}

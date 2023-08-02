@@ -1,3 +1,4 @@
+from django.shortcuts import render
 from django.views.generic import TemplateView
 
 from online_marketplace.products.models import Category # SubCategory
@@ -15,3 +16,7 @@ class IndexView(TemplateView):
         context['categories'] = categories
         # context['subcategories'] = SubCategory.objects.all()
         return context
+
+
+def about_view(request):
+    return render(request, 'common/about_page.html')

@@ -1,8 +1,58 @@
-{% block content %}
-  <h2>Profile</h2>
-  <p>Username: {{ user.username }}</p>
-  <p>Email: {{ user.email }}</p>
+{% extends 'base/base.html' %}
 
-  <a href="{% url 'profile edit' user.pk %}">Edit Profile</a>
-  <a href="{% url 'profile delete' user.pk %}">Delete Profile</a>
+{% block content %}
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+<div class="container">
+    <h1 class="my-4">{{ profile.username }}'s Profile</h1>
+
+    <div class="row">
+        <div class="col-md-4">
+            <img src="{{ profile.avatar }}" alt="Profile image" class="img-fluid">
+        </div>
+        <div class="col-md-8">
+            <p><strong>First Name:</strong> {{ profile.first_name }}</p>
+            <p><strong>Last Name:</strong> {{ profile.last_name }}</p>
+            <p><strong>Email:</strong> {{ profile.email }}</p>
+            <p><strong>Average Rating:</strong> {{ profile.average_rating }}</p>
+            {% if user == profile %}
+                <a href="{% url 'profile edit' profile.pk %}" class="btn btn-warning">Edit Profile</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Rating section -->
+    {% if user.is_authenticated and user != profile %}
+        <div class="card my-3">
+            <div class="card-body">
+                <form method="post" action="{% url 'profile details' profile.pk %}">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        {{ rating_form.value.label_tag }} {{ rating_form.value }}
+                    </div>
+                    <input type="submit" value="{% if user_has_rated %}Edit Rating{% else %}Rate{% endif %}" class="btn btn-primary">
+                </form>
+            </div>
+        </div>
+    {% endif %}
+
+    <!-- Comments section -->
+    <h3 class="my-3">Comments</h3>
+    {% for comment in comments %}
+        <div class="card mb-2">
+            <div class="card-body">
+                <p class="card-text"><strong>{{ comment.user.username }}:</strong> {{ comment.text }}</p>
+            </div>
+        </div>
+    {% endfor %}
+    {% if user.is_authenticated and user != profile %}
+        <form method="post" action="{% url 'profile details' profile.pk %}">
+            {% csrf_token %}
+            <div class="form-group">
+                {{ comment_form.text.label_tag }} {{ comment_form.text }}
+            </div>
+            <input type="submit" value="{% if user_has_commented %}Edit Comment{% else %}Comment{% endif %}" class="btn btn-primary">
+        </form>
+    {% endif %}
+</div>
 {% endblock %}
