@@ -1,34 +1,70 @@
 {% extends 'base/base.html' %}
 
 {% block content %}
-  <div class="container mt-4">
-    <div class="row">
-      <!-- Галерия с изображения или главна снимка -->
-      <div class="col-lg-6">
-        <img src="{{ product.image_url }}" class="img-fluid" alt="{{ product.name }}">
-      </div>
-      <!-- Информация за продукта -->
-      <div class="col-lg-6">
-        <h2>{{ product.name }}</h2>
-        <h4 class="text-muted">{{ product.price }} лв.</h4>
-        <p>{{ product.description }}</p>
-        <dl>
-          <dt>Категория:</dt>
-          <dd>{{ product.category }}</dd>
-          <dt>Подкатегория:</dt>
-          <dd>{{ product.subcategory }}</dd>
-        </dl>
-        <!-- Контакт с продавача -->
-        <button id="showPhoneNumber" class="btn btn-primary">Покажи телефонен номер</button>
-        <p id="phoneNumber" class="mt-2" style="display: none;">{{ product.phone_number }}</p>
-      </div>
+    <div class="container mt-4">
+        <div class="row justify-content-md-center">
+            <div class="col col-lg-12">
+                <h2>{{ product.name }}</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div id="productCarousel" class="carousel slide" data-ride="carousel" data-interval="10000">
+                    <div class="carousel-inner">
+                        {% for product_image in product.images.all %}
+                            <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                                <a href="#" data-toggle="modal" data-target="#imageModal{{ forloop.counter }}">
+                                    <img src="{{ product_image.image.url }}" class="img-fluid" style="height: 70vh; object-fit: contain; display: block; margin-left: auto; margin-right: auto;" alt="{{ product.name }}">
+                                </a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <a class="carousel-control-prev" href="#productCarousel" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#productCarousel" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </div>
+                {% for product_image in product.images.all %}
+                    <div class="modal fade" id="imageModal{{ forloop.counter }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-body">
+                                    <img src="{{ product_image.image.url }}" class="img-fluid" alt="{{ product.name }}">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="col-md-auto">
+                <dl>
+                    <dt>Price:</dt>
+                    <dd>{{ product.price }}</dd>
+                    <dt>Category:</dt>
+                    <dd>{{ product.category }}</dd>
+                    <dt>Phone Number:</dt>
+                    <dd>{{ product.phone_number }}</dd>
+                    <dt>Uploader:</dt>
+                    <dd>{{ product.user}}</dd>
+                    <dt>Date Uploaded:</dt>
+                    <dd>{{ product.upload_date }}</dd>
+                    <dt>Location:</dt>
+                    <dd>{{ product.location }}</dd>
+                </dl>
+                {% if request.user == product.user %}
+                    <a href="{% url 'product update' product.id %}" class="btn btn-warning">Редактирай</a>
+                    <a href="{% url 'product delete' product.id %}" class="btn btn-danger">Изтрий</a>
+                {% endif %}
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-lg-12">
+                <p>{{ product.description }}</p>
+            </div>
+        </div>
     </div>
-  </div>
-
-  <script>
-    document.getElementById('showPhoneNumber').addEventListener('click', function() {
-      document.getElementById('phoneNumber').style.display = 'block';
-      this.style.display = 'none'; // Скрива бутона след натискане
-    });
-  </script>
 {% endblock %}

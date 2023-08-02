@@ -9,7 +9,7 @@ class IndexView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         search_term = self.request.GET.get('search', '')
-        categories = Category.objects.all()
+        categories = Category.objects.order_by('name')
         if search_term:
             categories = categories.filter(name__icontains=search_term)
         context['categories'] = categories

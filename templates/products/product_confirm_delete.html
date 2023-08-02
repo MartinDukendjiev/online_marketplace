@@ -1,7 +1,13 @@
-{% if request.user == product.user %}
-    <a href="{% url 'product update' product.id %}">Edit</a>
-    <form method="POST" action="{% url 'product delete' product.id %}" style="display:inline;">
-        {% csrf_token %}
-        <input type="submit" value="Delete">
-    </form>
-{% endif %}
+{% extends 'base/base.html' %}
+
+{% block content %}
+    <div class="container">
+        <h1>Потвърждение за изтриване</h1>
+        <p>Наистина ли искате да изтриете продукта "{{ object.name }}"?</p>
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Да, изтрий</button>
+            <a href="{% url 'product details' product.pk%}" class="btn btn-secondary">Не, върни ме обратно</a>
+        </form>
+    </div>
+{% endblock content %}

@@ -1,8 +1,82 @@
+{% extends 'base/base.html' %}
+
 {% block content %}
-  <h2>Edit Product</h2>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Save changes</button>
-  </form>
+    <div class="container mt-4">
+        <h2>Редактиране на продукт</h2>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% if form.errors %}
+                <div class="alert alert-danger" role="alert">
+                    <strong>Please check:</strong>
+                    {% for field, errors in form.errors.items %}
+                        {% for error in errors %}
+                            <p>{{ field|capfirst }}: {{ error }}</p>
+                        {% endfor %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <div class="form-group">
+                <label for="name">Име на продукта:</label>
+                <input type="text" class="form-control" id="name" name="name" value="{{ form.name.value|default:'' }}"
+                       required>
+            </div>
+            <div class="form-group">
+                <label for="description">Описание:</label>
+                <textarea class="form-control" id="description" name="description"
+                          required>{{ form.description.value|default:'' }}</textarea>
+            </div>
+            <div class="form-group">
+                <label for="category">Категория:</label>
+                <select class="form-control" id="category" name="category" required>
+                    {% for category in categories %}
+                        <option value="{{ category.id }}"
+                                {% if category.id == form.category.value %}selected{% endif %}>{{ category.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="price">Цена:</label>
+                <input type="number" step="0.01" class="form-control" id="price" name="price"
+                       value="{{ form.price.value|default:'' }}" required>
+            </div>
+            <div class="form-group">
+                <label for="location">Местоположение:</label>
+                <input type="text" class="form-control" id="location" name="location"
+                       value="{{ form.location.value|default:'' }}" required>
+            </div>
+            <div class="form-group">
+                <label for="condition">Състояние:</label>
+                <select class="form-control" id="condition" name="condition" required>
+                    <option value="New" {% if form.condition.value == "New" %}selected{% endif %}>Ново</option>
+                    <option value="Used" {% if form.condition.value == "Used" %}selected{% endif %}>Употребявано
+                    </option>
+                </select>
+            </div>
+
+
+            <div class="form-group">
+                <label for="image">Снимки:</label>
+                {{ formset.management_form }}
+                <ul>
+                    {% for form in formset %}
+                        <li>
+                            {% if form.instance.id %}
+                                <a href="{{ form.instance.image.url }}" target="_blank">
+                                    <img src="{{ form.instance.image.url }}" alt="{{ form.instance.image.name }}"
+                                         width="100">
+                                </a>
+                                <input type="checkbox" name="{{ form.prefix }}-DELETE" id="{{ form.prefix }}-DELETE">
+                                <label for="{{ form.prefix }}-DELETE">Изтрий</label>
+                            {% endif %}
+                            {{ form.image.label_tag }} {{ form.image }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+
+            <button type="submit" class="btn btn-primary">Редактирай</button>
+        </form>
+    </div>
 {% endblock %}
