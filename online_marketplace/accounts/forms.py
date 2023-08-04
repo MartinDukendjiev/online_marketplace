@@ -17,7 +17,7 @@ class RegisterUserForm(auth_forms.UserCreationForm):
 
 
 class LoginUserForm(auth_forms.AuthenticationForm):
-    username = forms.CharField()
+    pass
 
 
 class CommentForm(forms.ModelForm):

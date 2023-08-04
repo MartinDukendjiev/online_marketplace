@@ -17,7 +17,17 @@
                     <div class="card-header text-center">
                         <h3>Login to Goodsspotter</h3>
                     </div>
+                    {% if form.errors %}
+                        {% for field, errors in form.errors.items %}
+                            {% for error in errors %}
+                                <div class="alert alert-primary" role="alert">
+                                    <p>{{ error }}</p>
+                                </div>
+                            {% endfor %}
+                        {% endfor %}
+                    {% endif %}
                     <div class="card-body">
+
                         <form action="{% url 'login user' %}" method="post">
                             {% csrf_token %}
                             <div class="form-group">

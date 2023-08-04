@@ -6,7 +6,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy, reverse
 from django.views.generic import DetailView, CreateView, UpdateView, DeleteView
 
-from online_marketplace.accounts.forms import RegisterUserForm, CommentForm, RatingForm
+from online_marketplace.accounts.forms import RegisterUserForm, CommentForm, RatingForm, LoginUserForm
 from online_marketplace.accounts.models import Comment, Rating
 
 UserModel = get_user_model()
@@ -121,7 +121,8 @@ class ProfileDeleteView(LoginRequiredMixin, DeleteView):
         return context
 
     def get_success_url(self):
-        return reverse('profile details', kwargs={'pk': self.object.pk})
+        return reverse('login user')
+
 
 def add_comment(request, pk):
     profile = get_object_or_404(UserModel, pk=pk)
