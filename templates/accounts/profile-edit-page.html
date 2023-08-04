@@ -30,10 +30,10 @@
             <a href="{% url 'profile details' profile.pk %}" class="btn btn-secondary">Cancel</a>
 
             {% if user.is_authenticated and user == profile %}
-                <a href="{% url 'profile delete' profile.pk %}" class="btn btn-danger float-right">Delete
-                    Profile</a>
+                <a href="{% url 'profile delete' profile.pk %}" class="btn btn-danger float-right">Delete Profile</a>
             {% endif %}
 
+            <a href="{% url 'password change' profile.pk %}" class="btn btn-info">Change Password</a> <!-- New Button -->
 
         </form>
     </div>

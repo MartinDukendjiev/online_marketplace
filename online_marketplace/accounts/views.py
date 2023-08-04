@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth import login, get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.views import LogoutView, LoginView
+from django.contrib.auth.views import LogoutView, LoginView, PasswordChangeView, PasswordChangeDoneView
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy, reverse
 from django.views.generic import DetailView, CreateView, UpdateView, DeleteView
@@ -108,6 +108,19 @@ class ProfileEditView(LoginRequiredMixin, UpdateView):
 
     def get_success_url(self):
         return reverse('profile details', kwargs={'pk': self.object.pk})
+
+
+class ProfilePasswordChangeView(PasswordChangeView):
+    template_name = 'accounts/change_password.html'
+    success_url = 'change-password/done/'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['profile'] = self.request.user
+        return context
+
+class ProfilePasswordChangeDoneView(PasswordChangeDoneView):
+    template_name = 'accounts/password_change_done.html'
 
 
 class ProfileDeleteView(LoginRequiredMixin, DeleteView):

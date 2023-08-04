@@ -6,17 +6,8 @@
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-header text-center">
-                        <h3>Register on Goodsspotter</h3>
+                        <h3>Register on GoodsSpotter</h3>
                     </div>
-                    {% if form.errors %}
-                        {% for field, errors in form.errors.items %}
-                            {% for error in errors %}
-                                <div class="alert alert-primary" role="alert">
-                                    <p>{{ error }}</p>
-                                </div>
-                            {% endfor %}
-                        {% endfor %}
-                    {% endif %}
                     <div class="card-body">
                         <form action="{% url 'register user' %}" method="post">
                             {% csrf_token %}
@@ -24,18 +15,50 @@
                                 <label for="username">Username:</label>
                                 <input type="text" class="form-control" id="username" name="username" required>
                             </div>
+                            {% if form.username.errors %}
+                                {% for error in form.username.errors %}
+                                    <div class="alert alert-primary" role="alert">
+                                        <p>{{ error }}</p>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+
                             <div class="form-group">
                                 <label for="email">Email:</label>
                                 <input type="email" class="form-control" id="email" name="email" required>
                             </div>
+                            {% if form.email.errors %}
+                                {% for error in form.email.errors %}
+                                    <div class="alert alert-primary" role="alert">
+                                        <p>{{ error }}</p>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+
                             <div class="form-group">
                                 <label for="password1">Password:</label>
                                 <input type="password" class="form-control" id="password1" name="password1" required>
                             </div>
+                            {% if form.password1.errors %}
+                                {% for error in form.password1.errors %}
+                                    <div class="alert alert-primary" role="alert">
+                                        <p>{{ error }}</p>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+
                             <div class="form-group">
                                 <label for="password2">Confirm Password:</label>
                                 <input type="password" class="form-control" id="password2" name="password2" required>
                             </div>
+                            {% if form.password2.errors %}
+                                {% for error in form.password2.errors %}
+                                    <div class="alert alert-primary" role="alert">
+                                        <p>{{ error }}</p>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+
                             <div class="form-group text-center">
                                 <button type="submit" class="btn btn-primary">Register</button>
                             </div>
