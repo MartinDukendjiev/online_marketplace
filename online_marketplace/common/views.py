@@ -14,7 +14,6 @@ class IndexView(TemplateView):
         if search_term:
             categories = categories.filter(name__icontains=search_term)
         context['categories'] = categories
-        # context['subcategories'] = SubCategory.objects.all()
         return context
 
 

@@ -21,7 +21,7 @@ class ProductListView(ListView):
         queryset = super().get_queryset().order_by('-upload_date')
         search_query = self.request.GET.get('search', '')
         category_query = self.request.GET.get('category', '')
-        paginate_by = 10
+        # paginate_by = 10
 
         if search_query:
             queryset = queryset.filter(Q(name__icontains=search_query) | Q(description__icontains=search_query))
