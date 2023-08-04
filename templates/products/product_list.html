@@ -4,7 +4,7 @@
 {% block content %}
     <div class="container">
         <h1 class="mt-5">All Products</h1>
-        <form method="get" action="/products/" class="form-inline my-2 my-lg-0">
+        <form method="get" action="products/" class="form-inline my-2 my-lg-0">
             <input class="form-control mr-sm-2" type="text" name="search" placeholder="Search for product"
                    aria-label="Search...">
             <select class="custom-select mr-sm-2" name="category">
@@ -23,12 +23,19 @@
                         <div id="productCarousel{{ product.pk }}" class="carousel slide" data-ride="carousel"
                              data-interval="false">
                             <div class="carousel-inner">
-                                {% for image in product.images.all %}
+                                {% if product.images.all %}
+                                    {% for image in product.images.all %}
+                                        <div class="carousel-item {% if forloop.first %}active{% endif %} ">
+                                            <img src="{{ image.image.url }}" class="d-block w-100"
+                                                 style="height: 30vh; object-fit: contain" alt="{{ product.name }}">
+                                        </div>
+                                    {% endfor %}
+                                {% else %}
                                     <div class="carousel-item {% if forloop.first %}active{% endif %} ">
-                                        <img src="{{ image.image.url }}" class="d-block w-100"
-                                             style="height: 30vh; object-fit: contain" alt="{{ product.name }}">
+                                        <img src="#" class="d-block w-100"
+                                             style="height: 30vh; object-fit: contain" alt="">
                                     </div>
-                                {% endfor %}
+                                {% endif %}
                             </div>
                             <a class="carousel-control-prev" href="#productCarousel{{ product.pk }}" role="button"
                                data-slide="prev">
