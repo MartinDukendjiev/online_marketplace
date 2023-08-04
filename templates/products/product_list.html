@@ -20,19 +20,23 @@
             {% for product in products %}
                 <div class="col-md-4 ">
                     <div class="card mb-4 shadow-sm">
-                        <div id="productCarousel{{ product.pk }}" class="carousel slide" data-ride="carousel" data-interval="false">
+                        <div id="productCarousel{{ product.pk }}" class="carousel slide" data-ride="carousel"
+                             data-interval="false">
                             <div class="carousel-inner">
                                 {% for image in product.images.all %}
                                     <div class="carousel-item {% if forloop.first %}active{% endif %} ">
-                                        <img src="{{ image.image.url }}" class="d-block w-100" style="height: 30vh; object-fit: contain" alt="{{ product.name }}">
+                                        <img src="{{ image.image.url }}" class="d-block w-100"
+                                             style="height: 30vh; object-fit: contain" alt="{{ product.name }}">
                                     </div>
                                 {% endfor %}
                             </div>
-                            <a class="carousel-control-prev" href="#productCarousel{{ product.pk }}" role="button" data-slide="prev">
+                            <a class="carousel-control-prev" href="#productCarousel{{ product.pk }}" role="button"
+                               data-slide="prev">
                                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                                 <span class="sr-only">Previous</span>
                             </a>
-                            <a class="carousel-control-next" href="#productCarousel{{ product.pk }}" role="button" data-slide="next">
+                            <a class="carousel-control-next" href="#productCarousel{{ product.pk }}" role="button"
+                               data-slide="next">
                                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                                 <span class="sr-only">Next</span>
                             </a>
@@ -52,5 +56,4 @@
             {% endfor %}
         </div>
     </div>
-
 {% endblock content %}

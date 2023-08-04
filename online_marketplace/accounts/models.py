@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db.models import Avg
 from django.contrib.auth.models import AbstractUser
 from django.db import models
@@ -11,9 +12,7 @@ class MarketplaceUser(AbstractUser):
         null=True,
         blank=True
     )
-    average_rating = models.DecimalField(
-        max_digits=3,
-        decimal_places=2,
+    average_rating = models.IntegerField(
         default=0
     )
 
@@ -35,9 +34,11 @@ class Rating(models.Model):
         related_name='received_ratings',
         on_delete=models.CASCADE
     )
-    value = models.DecimalField(
-        max_digits=3,
-        decimal_places=2
+    value = models.PositiveIntegerField(
+        validators=[
+            MaxValueValidator(5, message="Value must be less than or equal to 5"),
+            MinValueValidator(1, message="Value must be greater than or equal to 1")
+        ]
     )
 
     def save(self, *args, **kwargs):

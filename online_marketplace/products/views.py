@@ -6,8 +6,8 @@ from django.http import Http404, HttpResponseRedirect, HttpResponseForbidden
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
-from online_marketplace.products.models import Product, Category, ProductImage  # SubCategory
-from online_marketplace.products.forms import ProductForm, ProductUpdateForm, ProductSearchForm, ProductImageForm
+from online_marketplace.products.models import Product, Category, ProductImage
+from online_marketplace.products.forms import ProductForm, ProductSearchForm, ProductImageForm, ProductUpdateForm
 
 ProductImageFormSet = inlineformset_factory(Product, ProductImage, form=ProductImageForm, extra=4)
 
@@ -21,7 +21,7 @@ class ProductListView(ListView):
         queryset = super().get_queryset().order_by('-upload_date')
         search_query = self.request.GET.get('search', '')
         category_query = self.request.GET.get('category', '')
-        # subcategory_query = self.request.GET.get('subcategory', '')
+        paginate_by = 10
 
         if search_query:
             queryset = queryset.filter(Q(name__icontains=search_query) | Q(description__icontains=search_query))
@@ -29,16 +29,13 @@ class ProductListView(ListView):
         if category_query and category_query.isdigit():
             queryset = queryset.filter(category__id=category_query)
 
-        # if subcategory_query and subcategory_query.isdigit():
-        #     queryset = queryset.filter(subcategory__id=subcategory_query)
-
         return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['search_form'] = ProductSearchForm(self.request.GET)
         context['categories'] = Category.objects.all()
-        # context['subcategories'] = SubCategory.objects.all()
+        context['query_params'] = self.request.GET.urlencode() # new
         return context
 
 
@@ -47,22 +44,15 @@ class ProductDetailView(DetailView):
     template_name = 'products/product_detail.html'
     context_object_name = 'product'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        product = self.get_object()
+        similar_products = Product.objects.filter(category=product.category).exclude(pk=product.pk).order_by('?')[:4]
 
-# class ProductCreateView(LoginRequiredMixin, CreateView):
-#     model = Product
-#     form_class = ProductForm
-#     template_name = 'products/product_create.html'
-#     success_url = reverse_lazy('product list')
-#
-#     def form_valid(self, form):
-#         form.instance.user = self.request.user
-#         return super().form_valid(form)
-#
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         context['categories'] = Category.objects.all()
-#         # context['subcategories'] = SubCategory.objects.all()
-#         return context
+        context['similar_products'] = similar_products
+
+        return context
+
 
 class ProductCreateView(LoginRequiredMixin, CreateView):
     model = Product
@@ -104,7 +94,6 @@ class ProductUpdateView(LoginRequiredMixin, UpdateView):
         product = self.get_object()
         if request.user.is_staff or request.user == product.user:
             return super().dispatch(request, *args, **kwargs)
-
         return HttpResponseForbidden("You do not have permission to edit this product.")
 
     def get_success_url(self):
@@ -115,7 +104,6 @@ class ProductUpdateView(LoginRequiredMixin, UpdateView):
         if self.request.POST:
             context['formset'] = ProductImageFormSet(self.request.POST, self.request.FILES, instance=self.object)
         else:
-            # Използваме queryset, за да редактираме съществуващите изображения
             context['formset'] = ProductImageFormSet(queryset=self.object.images.all())
         context['categories'] = Category.objects.all()
         return context
@@ -124,9 +112,9 @@ class ProductUpdateView(LoginRequiredMixin, UpdateView):
         context = self.get_context_data()
         formset = context['formset']
         if formset.is_valid():
-            self.object = form.save()  # Записваме промените във формата
+            self.object = form.save()
             formset.instance = self.object
-            formset.save()  # Записваме промените във формсета
+            formset.save()
             return HttpResponseRedirect(self.get_success_url())
         else:
             return self.render_to_response(self.get_context_data(form=form))
@@ -154,3 +142,4 @@ class ProductDeleteView(LoginRequiredMixin, DeleteView):
         if obj.user != self.request.user:
             raise Http404()
         return obj
+

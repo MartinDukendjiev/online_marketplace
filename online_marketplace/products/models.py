@@ -5,18 +5,10 @@ from django.utils import timezone
 
 class Category(models.Model):
     name = models.CharField(max_length=200)
-    image = models.ImageField(upload_to='static/categories/', null=True, blank=True)
+    image = models.ImageField(upload_to='categories/', null=True, blank=True)
 
     def __str__(self):
         return self.name
-
-
-# class SubCategory(models.Model):
-#     name = models.CharField(max_length=200)
-#     category = models.ForeignKey(Category, related_name='subcategories', on_delete=models.CASCADE)
-#
-#     def __str__(self):
-#         return self.name
 
 
 class Product(models.Model):
@@ -33,17 +25,14 @@ class Product(models.Model):
     upload_date = models.DateTimeField(default=timezone.now)
     location = models.CharField(max_length=200)
     category = models.ForeignKey(Category, related_name='products', on_delete=models.CASCADE)
-    # subcategory = models.ForeignKey(SubCategory, related_name='products', null=True, blank=True, on_delete=models.SET_NULL)
     condition = models.CharField(max_length=20, choices=CONDITION_CHOICES, default='New')
-    image = models.ImageField(upload_to='static/products/', null=True, blank=True)
 
     def __str__(self):
         return self.name
 
 
-
 class ProductImage(models.Model):
-    image = models.ImageField(upload_to='static/products/')
+    image = models.ImageField(upload_to='products/')
     product = models.ForeignKey(Product, related_name='images', on_delete=models.CASCADE)
 
     def __str__(self):

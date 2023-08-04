@@ -1,3 +1,5 @@
+from django.conf import settings
+from django.conf.urls.static import static
 from django.urls import path, include
 from .views import ProfileDetailView, UserRegisterView, UserLoginView, UserLogoutView, ProfileEditView, \
     ProfileDeleteView, add_rating
@@ -13,3 +15,6 @@ urlpatterns = [
         path('delete/', ProfileDeleteView.as_view(), name='profile delete'),
     ]))
 ]
+
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

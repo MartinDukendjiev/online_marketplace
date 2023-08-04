@@ -1,18 +1,17 @@
 from django import forms
-from .models import Product, Category, ProductImage  # SubCategory
+from .models import Product, Category, ProductImage
 
 
 class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
-        fields = ['name', 'description', 'price', 'phone_number', 'location', 'category', 'condition',
-                  'image']
+        fields = ['name', 'description', 'price', 'phone_number', 'location', 'category', 'condition']
 
 
 class ProductUpdateForm(forms.ModelForm):
     class Meta:
         model = Product
-        fields = ['name', 'image', 'description', 'price', 'location', 'category']
+        fields = ['name', 'description', 'price', 'location', 'category']
 
 
 class ProductSearchForm(forms.Form):

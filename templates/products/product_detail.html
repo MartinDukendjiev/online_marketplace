@@ -1,6 +1,7 @@
 {% extends 'base/base.html' %}
 
 {% block content %}
+    <hr class="my-4">
     <div class="container mt-4">
         <div class="row justify-content-md-center">
             <div class="col col-lg-12">
@@ -14,7 +15,9 @@
                         {% for product_image in product.images.all %}
                             <div class="carousel-item {% if forloop.first %}active{% endif %}">
                                 <a href="#" data-toggle="modal" data-target="#imageModal{{ forloop.counter }}">
-                                    <img src="{{ product_image.image.url }}" class="img-fluid" style="height: 70vh; object-fit: contain; display: block; margin-left: auto; margin-right: auto;" alt="{{ product.name }}">
+                                    <img src="{{ product_image.image.url }}" class="img-fluid"
+                                         style="height: 70vh; object-fit: contain; display: block; margin-left: auto; margin-right: auto;"
+                                         alt="{{ product.name }}">
                                 </a>
                             </div>
                         {% endfor %}
@@ -29,7 +32,8 @@
                     </a>
                 </div>
                 {% for product_image in product.images.all %}
-                    <div class="modal fade" id="imageModal{{ forloop.counter }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal fade" id="imageModal{{ forloop.counter }}" tabindex="-1"
+                         aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered modal-lg">
                             <div class="modal-content">
                                 <div class="modal-body">
@@ -49,7 +53,8 @@
                     <dt>Phone Number:</dt>
                     <dd>{{ product.phone_number }}</dd>
                     <dt>Uploader:</dt>
-                    <dd><dd><a href="{% url 'profile details' product.user.id %}">{{ product.user.username }}</a></dd></dd>
+                    <dd>
+                    <dd><a href="{% url 'profile details' product.user.id %}">{{ product.user.username }}</a></dd>
                     <dt>Date Uploaded:</dt>
                     <dd>{{ product.upload_date }}</dd>
                     <dt>Location:</dt>
@@ -67,4 +72,48 @@
             </div>
         </div>
     </div>
+    <hr class="my-4">
+    <div class="container mt-4">
+        <h3>Подобни продукти</h3>
+        <div class="row">
+            {% for similar_product in similar_products %}
+                <div class="col-md-3">
+                    <div class="card mb-4 shadow-sm" style="width: 15rem;">
+                        <div id="productCarousel{{ similar_product.pk }}" class="carousel slide"
+                             data-ride="carousel" data-interval="false">
+                            <div class="carousel-inner">
+                                {% for image in similar_product.images.all %}
+                                    <div class="carousel-item {% if forloop.first %}active{% endif %} ">
+                                        <img src="{{ image.image.url }}" class="d-block w-100"
+                                             style="height: 25vh; object-fit: contain"
+                                             alt="{{ similar_product.name }}">
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <a class="carousel-control-prev" href="#productCarousel{{ similar_product.pk }}"
+                               role="button" data-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Предишен</span>
+                            </a>
+                            <a class="carousel-control-next" href="#productCarousel{{ similar_product.pk }}"
+                               role="button" data-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Следващ</span>
+                            </a>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">{{ similar_product.name }}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="btn-group">
+                                    <a href="{% url 'product details' similar_product.pk %}"
+                                       class="btn btn-sm btn-outline-secondary">Детайли</a>
+                                </div>
+                                <small class="text-muted">{{ similar_product.price }} лв.</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <hr class="my-4">
 {% endblock %}

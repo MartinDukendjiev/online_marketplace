@@ -6,31 +6,35 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'product list' %}">Browse Products</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'about' %}">About Us</a>
+            </li>
             {% if user.is_authenticated %}
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'product list' %}">Обяви</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'product create' %}">Добави Обява</a>
+                    <a class="nav-link" href="{% url 'product create' %}">Add Product</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'profile details' user.pk %}">{{ user.username }}</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'logout user' %}">Излез</a>
+                    <a class="nav-link" href="{% url 'logout user' %}">Logout</a>
                 </li>
+                {% if user.is_authenticated and user.is_staff %}
+                    <a href="{% url 'admin:index' %}" class="btn btn-secondary">Admin Panel</a>
+                {% endif %}
             {% else %}
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'login user' %}">Влез</a>
+                    <a class="nav-link" href="{% url 'login user' %}">Login</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'register user' %}">Регистрирай се.</a>
+                    <a class="nav-link" href="{% url 'register user' %}">Register</a>
                 </li>
             {% endif %}
 
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'about' %}">About Us</a>
-            </li>
+
         </ul>
     </div>
 </nav>
