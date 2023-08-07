@@ -41,6 +41,11 @@
                        value="{{ form.price.value|default:'' }}" required>
             </div>
             <div class="form-group">
+                <label for="phone_number">Телефонен номер:</label>
+                <input type="text" class="form-control" id="phone_number" name="phone_number"
+                       value="{{ form.phone_number.value|default:'' }}" required>
+            </div>
+            <div class="form-group">
                 <label for="location">Местоположение:</label>
                 <input type="text" class="form-control" id="location" name="location"
                        value="{{ form.location.value|default:'' }}" required>
@@ -54,27 +59,35 @@
                 </select>
             </div>
 
-
             <div class="form-group">
                 <label for="image">Снимки:</label>
                 {{ formset.management_form }}
                 <ul>
                     {% for form in formset %}
+                        {% if form.errors %}
+                            <div class="alert alert-danger">
+                                {{ form.errors }}
+                            </div>
+                        {% endif %}
                         <li>
+                            {{ form.id }}
                             {% if form.instance.id %}
-                                <a href="{{ form.instance.image.url }}" target="_blank">
-                                    <img src="{{ form.instance.image.url }}" alt="{{ form.instance.image.name }}"
-                                         width="100">
-                                </a>
+                                {% if form.instance.image and form.instance.image.url %}
+                                    <a href="{{ form.instance.image.url }}" target="_blank">
+                                        <img src="{{ form.instance.image.url }}" alt="{{ form.instance.image.name }}"
+                                             width="100">
+                                    </a>
+                                {% endif %}
+
                                 <input type="checkbox" name="{{ form.prefix }}-DELETE" id="{{ form.prefix }}-DELETE">
                                 <label for="{{ form.prefix }}-DELETE">Изтрий</label>
+
                             {% endif %}
                             {{ form.image.label_tag }} {{ form.image }}
                         </li>
                     {% endfor %}
                 </ul>
             </div>
-
 
             <button type="submit" class="btn btn-primary">Редактирай</button>
         </form>

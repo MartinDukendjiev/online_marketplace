@@ -1,15 +1,13 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
-from django.forms import modelformset_factory, inlineformset_factory
 
 from django.http import Http404, HttpResponseRedirect, HttpResponseForbidden
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
-from online_marketplace.products.models import Product, Category, ProductImage
-from online_marketplace.products.forms import ProductForm, ProductSearchForm, ProductImageForm, ProductUpdateForm
-
-ProductImageFormSet = inlineformset_factory(Product, ProductImage, form=ProductImageForm, extra=4)
+from online_marketplace.products.models import Product, Category
+from online_marketplace.products.forms import ProductForm, ProductSearchForm, ProductUpdateForm, \
+    ProductImageFormSet
 
 
 class ProductListView(ListView):
@@ -71,26 +69,19 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['categories'] = Category.objects.all()
-
-        ImageFormSet = modelformset_factory(ProductImage, form=ProductImageForm, extra=4)
-        context['formset'] = ImageFormSet(queryset=ProductImage.objects.none())
-
+        context['formset'] = ProductImageFormSet(instance=None)
         return context
 
     def form_valid(self, form):
-        form.instance.user = self.request.user
-        response = super().form_valid(form)
+        self.object = form.save(commit=False)
+        self.object.user = self.request.user
+        self.object.save()
 
-        ImageFormSet = modelformset_factory(ProductImage, form=ProductImageForm, extra=4)
-        formset = ImageFormSet(self.request.POST, self.request.FILES, queryset=ProductImage.objects.none())
-
+        formset = ProductImageFormSet(self.request.POST, self.request.FILES, instance=self.object)
         if formset.is_valid():
-            for image_form in formset:
-                image = image_form.cleaned_data.get('image')
-                if image:
-                    ProductImage.objects.create(image=image, product=self.object)
+            formset.save()
 
-        return response
+        return HttpResponseRedirect(self.get_success_url())
 
 
 class ProductUpdateView(LoginRequiredMixin, UpdateView):
@@ -112,7 +103,7 @@ class ProductUpdateView(LoginRequiredMixin, UpdateView):
         if self.request.POST:
             context['formset'] = ProductImageFormSet(self.request.POST, self.request.FILES, instance=self.object)
         else:
-            context['formset'] = ProductImageFormSet(queryset=self.object.images.all())
+            context['formset'] = ProductImageFormSet(instance=self.object)
         context['categories'] = Category.objects.all()
         return context
 

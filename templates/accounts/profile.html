@@ -5,15 +5,15 @@
 
     <div class="container">
         <h1 class="my-4">{{ profile.username }}'s Profile</h1>
-
+        <hr>
         <div class="row">
             {% if profile.avatar %}
                 <div class="col-md-4">
-                    <img src="{{ profile.avatar.url }}" alt="Profile image" class="img-fluid">
+                    <img src="{{ profile.avatar.url }}" alt="Profile image" class="img-fluid rounded-circle">
                 </div>
             {% else %}
                 <div class="col-md-4">
-                    <img src="{% static 'avatar-def.png' %}" alt="Profile image" class="img-fluid">
+                    <img src="{% static 'avatar-def.png' %}" alt="Profile image" class="img-fluid rounded-circle">
                 </div>
             {% endif %}
             <div class="col-md-8">
@@ -27,7 +27,7 @@
             </div>
 
         </div>
-
+        <hr>
         <!-- Rating section -->
         {% if user.is_authenticated and user != profile and not user_has_rated %}
             <div class="card my-3">
@@ -42,25 +42,31 @@
                 </div>
             </div>
         {% endif %}
-
+        <hr>
         <!-- Comments section -->
-        <h3 class="my-3">Comments</h3>
-        {% for comment in comments %}
-            <div class="card mb-2">
-                <div class="card-body">
-                    <p class="card-text"><strong>{{ comment.user.username }}:</strong> {{ comment.text }}</p>
-                    {% if comment.user == user %}
-                        <form method="post" action="{% url 'profile details' profile.pk %}">
-                            {% csrf_token %}
-                            <input type="hidden" name="comment_id" value="{{ comment.pk }}">
-                            <input type="submit" value="Delete" name="delete_comment" class="btn btn-danger">
-                        </form>
-                    {% endif %}
+        <h3 class="my-3">Comments:</h3>
+        {% if comments %}
+            {% for comment in comments %}
+                <div class="card mb-2">
+                    <div class="card-body">
+                        <p class="card-text"><strong>{{ comment.user.username }}:</strong> {{ comment.text }}</p>
+                        {% if comment.user == user %}
+                            <form method="post" action="{% url 'profile details' profile.pk %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="comment_id" value="{{ comment.pk }}">
+                                <input type="submit" value="Delete" name="delete_comment" class="btn btn-danger">
+                            </form>
+                        {% endif %}
+                    </div>
                 </div>
-            </div>
-        {% endfor %}
+            {% endfor %}
+
+        {% else %}
+            <h4 class="my-5">No comments yet.</h4>
+        {% endif %}
+        <hr>
         {% if user.is_authenticated and user != profile %}
-            <form method="post" action="{% url 'profile details' profile.pk %}">
+            <form   method="post" action="{% url 'profile details' profile.pk %}">
                 {% csrf_token %}
                 <div class="form-group">
                     {{ comment_form.text }}
