@@ -11,20 +11,26 @@
         <hr>
         <div class="row">
             {% for category in categories %}
-                <div class="col-md-4">
-                    <div class="card mb-4 shadow-sm">
-                        <img src="{{ category.image.url }}" class="bd-placeholder-img card-img-top" width="100%"
-                             height="225">
-                        <div class="card-body">
-                            <p class="card-text">{{ category.name }}</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="btn-group">
-                                    <a href="{% url 'product list' %}?category={{ category.id }}"
-                                       class="btn btn-sm btn-outline-secondary">Show All Products in Category</a>
+                <div class="col-md-4 d-flex align-items-stretch pb-4">
+                    <a href="{% url 'product list' %}?category={{ category.id }}" class="text-decoration-none text-body">
+                        <div class="card mb-4 shadow-sm flex-fill d-flex flex-column">
+                            {% if category.image %}
+                                <img src="{{ category.image.url }}" class="bd-placeholder-img card-img-top"
+                                    style="height: 30vh; object-fit: contain" alt="{{ category.name }}">
+                            {% else %}
+                                <img src="#" class="bd-placeholder-img card-img-top"
+                                    style="height: 30vh; object-fit: contain" alt="">
+                            {% endif %}
+                            <div class="card-body">
+                                <p class="card-text">{{ category.name }}</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="btn-group">
+                                        <span class="btn btn-sm btn-outline-success">Show All Products in Category</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
             {% endfor %}
         </div>

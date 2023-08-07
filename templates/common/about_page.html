@@ -2,16 +2,22 @@
 
 {% block content %}
     <div class="container mt-4">
+
         <h1>About Goodsspotter</h1>
         <p>
-            Goodsspotter is the leading online marketplace for buying and selling goods in your community. Founded in [year], we have redefined the way people shop for everything from furniture to electronics to automobiles. Our mission is to empower individuals and small businesses by providing them with a platform to reach a wider audience.
+            Goodsspotter is the leading online marketplace for buying and selling goods in your community. Founded in
+            [year], we have redefined the way people shop for everything from furniture to electronics to automobiles.
+            Our mission is to empower individuals and small businesses by providing them with a platform to reach a
+            wider audience.
         </p>
-
+        <hr>
         <h2>Our Vision</h2>
         <p>
-            We believe in the power of community and the potential of every individual to create value. By connecting buyers and sellers in a secure and user-friendly environment, we aim to promote sustainable consumer practices, support local economies, and foster a sense of trust and collaboration among our users.
+            We believe in the power of community and the potential of every individual to create value. By connecting
+            buyers and sellers in a secure and user-friendly environment, we aim to promote sustainable consumer
+            practices, support local economies, and foster a sense of trust and collaboration among our users.
         </p>
-
+        <hr>
         <h2>Our Values</h2>
         <p>
             At Goodsspotter, our core values guide everything we do. We are committed to:
@@ -19,32 +25,41 @@
         <ul>
             <li><strong>Integrity:</strong> Upholding the highest ethical standards in all our transactions.</li>
             <li><strong>Innovation:</strong> Continuously improving our platform to enhance user experience.</li>
-            <li><strong>Inclusion:</strong> Creating an accessible marketplace for everyone, regardless of background or location.</li>
-            <li><strong>Community:</strong> Building strong relationships with our users and partners to create a thriving ecosystem.</li>
+            <li><strong>Inclusion:</strong> Creating an accessible marketplace for everyone, regardless of background or
+                location.
+            </li>
+            <li><strong>Community:</strong> Building strong relationships with our users and partners to create a
+                thriving ecosystem.
+            </li>
         </ul>
-
+        <hr>
         <h2>Our Features</h2>
         <p>
             Goodsspotter offers a wide range of features to make buying and selling as simple and enjoyable as possible:
         </p>
         <ul>
             <li>Easy-to-use search filters</li>
-            <li>Secure payment options</li>
             <li>Verified user profiles</li>
             <li>Customer support and dispute resolution</li>
             <li>Customized recommendations</li>
             <li>And much more!</li>
         </ul>
-
+        <hr>
         <h2>Join Us</h2>
         <p>
-            Whether you are looking to declutter your home, find a bargain, or start a small business, Goodsspotter is here to help. Join our community today and discover a world of opportunities right at your fingertips.
+            Whether you are looking to declutter your home, find a bargain, or start a small business, GoodsSpotter is
+            here to help. Join our community today and discover a world of opportunities right at your fingertips.
         </p>
-        <a href="{% url 'register user' %}" class="btn btn-primary">Sign Up Now</a>
+        {% if not user.is_authenticated %}
+            <a href="{% url 'register user' %}" class="btn btn-primary">Sign Up Now</a>
+        {% endif %}
 
+        <hr>
         <h2>Contact Us</h2>
         <p>
-            If you have any questions, concerns, or feedback, please don't hesitate to reach out. Our dedicated support team is always here to assist you. You can contact us at <a href="mailto:support@goodsspotter.com">support@goodsspotter.com</a> or call us at [phone number].
+            If you have any questions, concerns, or feedback, please don't hesitate to reach out. Our dedicated support
+            team is always here to assist you. You can contact us at <a href="mailto:goodsspoter@gmail.com">goodsspoter@gmail.com</a>
+            or call us at [phone number].
         </p>
     </div>
 {% endblock %}

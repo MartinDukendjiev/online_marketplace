@@ -1,20 +1,24 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="{% url 'index' %}">Online Marketplace</a>
+<nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
+    <a class="navbar-brand text-primary" href="{% url 'index' %}">GoodsSpotter</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
+    <div class="collapse navbar-collapse " id="navbarNav">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link " href="{% url 'about' %}">About Us</a>
+            </li>
+        </ul>
+        <ul class="navbar-nav mx-auto">
+            <li class="nav-item">
+                <a class="nav-link text-light" href="{% url 'product list' %}">All Products For Sale </a>
+            </li>
+        </ul>
         <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'product list' %}">Browse Products</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'about' %}">About Us</a>
-            </li>
             {% if user.is_authenticated %}
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'product create' %}">Add Product</a>
+                    <a class="nav-link" href="{% url 'product create' %}">Sell Product</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'profile details' user.pk %}">{{ user.username }}</a>
@@ -23,7 +27,7 @@
                     <a class="nav-link" href="{% url 'logout user' %}">Logout</a>
                 </li>
                 {% if user.is_authenticated and user.is_staff %}
-                    <a href="{% url 'admin:index' %}" class="btn btn-secondary">Admin Panel</a>
+                    <a href="{% url 'admin:index' %}" class="nav-link text-primary">Admin Panel</a>
                 {% endif %}
             {% else %}
                 <li class="nav-item">
@@ -33,8 +37,6 @@
                     <a class="nav-link" href="{% url 'register user' %}">Register</a>
                 </li>
             {% endif %}
-
-
         </ul>
     </div>
 </nav>

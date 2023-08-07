@@ -22,7 +22,7 @@
         </div>
 
         <!-- Rating section -->
-        {% if user.is_authenticated and user != profile %}
+        {% if user.is_authenticated and user != profile and not user_has_rated %}
             <div class="card my-3">
                 <div class="card-body">
                     <form method="post" action="{% url 'profile details' profile.pk %}">
@@ -30,8 +30,7 @@
                         <div class="form-group">
                             {{ rating_form.value.label_tag }} {{ rating_form.value }}
                         </div>
-                        <input type="submit" value="{% if user_has_rated %}Edit Rating{% else %}Rate{% endif %}"
-                               class="btn btn-primary">
+                        <input type="submit" value="Rate" class="btn btn-primary">
                     </form>
                 </div>
             </div>
@@ -43,6 +42,13 @@
             <div class="card mb-2">
                 <div class="card-body">
                     <p class="card-text"><strong>{{ comment.user.username }}:</strong> {{ comment.text }}</p>
+                    {% if comment.user == user %}
+                        <form method="post" action="{% url 'profile details' profile.pk %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="comment_id" value="{{ comment.pk }}">
+                            <input type="submit" value="Delete" name="delete_comment" class="btn btn-danger">
+                        </form>
+                    {% endif %}
                 </div>
             </div>
         {% endfor %}
@@ -50,11 +56,21 @@
             <form method="post" action="{% url 'profile details' profile.pk %}">
                 {% csrf_token %}
                 <div class="form-group">
-                     {{ comment_form.text }}
+                    {{ comment_form.text }}
                 </div>
-                <input type="submit" value="{% if user_has_commented %}Edit Comment{% else %}Comment{% endif %}"
-                       class="btn btn-primary">
+                <input type="submit" value="Comment" class="btn btn-primary">
             </form>
         {% endif %}
+        {% for product in user_products %}
+            <div class="card-body">
+                <p class="card-text">{{ product.name }}</p>
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="btn-group">
+                        <a href="{% url 'product details' product.pk %}" class="btn btn-sm btn-outline-secondary">Детайли</a>
+                    </div>
+                    <small class="text-muted">{{ product.price }} лв.</small>
+                </div>
+            </div>
+        {% endfor %}
     </div>
 {% endblock %}

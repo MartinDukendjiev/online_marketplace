@@ -18,10 +18,10 @@ class ProductListView(ListView):
     context_object_name = 'products'
 
     def get_queryset(self):
-        queryset = super().get_queryset().order_by('-upload_date')
+        queryset = super().get_queryset()
         search_query = self.request.GET.get('search', '')
         category_query = self.request.GET.get('category', '')
-        # paginate_by = 10
+        sort_by = self.request.GET.get('sort_by', '-upload_date')
 
         if search_query:
             queryset = queryset.filter(Q(name__icontains=search_query) | Q(description__icontains=search_query))
@@ -29,13 +29,21 @@ class ProductListView(ListView):
         if category_query and category_query.isdigit():
             queryset = queryset.filter(category__id=category_query)
 
+        if sort_by in ['name', 'price', 'upload_date']:
+            queryset = queryset.order_by(sort_by)
+        else:
+            queryset = queryset.order_by('-upload_date')
+
         return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['search_form'] = ProductSearchForm(self.request.GET)
-        context['categories'] = Category.objects.all()
-        context['query_params'] = self.request.GET.urlencode() # new
+        search_form = ProductSearchForm(self.request.GET)
+        context['search_form'] = search_form
+        context['categories'] = Category.objects.all().order_by('name')
+        context['query_params'] = self.request.GET.urlencode()
+        if 'category' in search_form.data and search_form.data['category'].isdigit():
+            context['category'] = Category.objects.get(id=search_form.data['category'])
         return context
 
 
@@ -142,4 +150,3 @@ class ProductDeleteView(LoginRequiredMixin, DeleteView):
         if obj.user != self.request.user:
             raise Http404()
         return obj
-
