@@ -103,7 +103,7 @@ class ProfileDetailView(LoginRequiredMixin, DetailView):
 class ProfileEditView(LoginRequiredMixin, UpdateView):
     model = UserModel
     template_name = 'accounts/profile-edit-page.html'
-    fields = ['first_name', 'last_name', 'email']
+    fields = ['first_name', 'last_name', 'email', 'avatar']
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
