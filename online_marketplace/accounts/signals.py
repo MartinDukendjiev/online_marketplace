@@ -37,19 +37,23 @@ def user_created(instance, created, **kwargs):
 
 @receiver(post_migrate)
 def add_user_groups(sender, **kwargs):
-    superuser_permissions = Permission.objects.all()
+    try:
+        superuser_permissions = Permission.objects.all()
 
-    content_type_product = ContentType.objects.get(app_label='products', model='product')
-    content_type_category = ContentType.objects.get(app_label='products', model='category')
-    content_type_product_image = ContentType.objects.get(app_label='products', model='productimage')
+        content_type_product = ContentType.objects.get(app_label='products', model='product')
+        content_type_category = ContentType.objects.get(app_label='products', model='category')
+        content_type_product_image = ContentType.objects.get(app_label='products', model='productimage')
 
-    content_types = [content_type_product, content_type_category, content_type_product_image]
-    staff_permissions = Permission.objects.filter(content_type__in=content_types)
+        content_types = [content_type_product, content_type_category, content_type_product_image]
+        staff_permissions = Permission.objects.filter(content_type__in=content_types)
 
-    superuser_group, created = Group.objects.get_or_create(name='Superuser')
-    if created:
-        superuser_group.permissions.set(superuser_permissions)
+        superuser_group, created = Group.objects.get_or_create(name='Superuser')
+        if created:
+            superuser_group.permissions.set(superuser_permissions)
 
-    staff_group, created = Group.objects.get_or_create(name='Staff')
-    if created:
-        staff_group.permissions.set(staff_permissions)
+        staff_group, created = Group.objects.get_or_create(name='Staff')
+        if created:
+            staff_group.permissions.set(staff_permissions)
+    except ContentType.DoesNotExist:
+        pass
+
