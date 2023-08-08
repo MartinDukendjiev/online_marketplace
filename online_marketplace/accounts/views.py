@@ -13,7 +13,15 @@ from online_marketplace.products.models import Product
 UserModel = get_user_model()
 
 
-class UserRegisterView(CreateView):
+class OnlyAnonymousMixin:
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect('index')
+
+        return super().dispatch(request, *args, **kwargs)
+
+
+class UserRegisterView(OnlyAnonymousMixin, CreateView):
     form_class = RegisterUserForm
     template_name = 'accounts/register.html'
     success_url = reverse_lazy('index')

@@ -5,12 +5,15 @@ from django.db.models import Avg
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
+from online_marketplace.common.validators import image_size_validator_5mb
+
 
 class MarketplaceUser(AbstractUser):
     avatar = models.ImageField(
         upload_to='avatars/',
         null=True,
-        blank=True
+        blank=True,
+        validators=[image_size_validator_5mb],
     )
     average_rating = models.IntegerField(
         default=0
