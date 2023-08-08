@@ -12,16 +12,17 @@ from online_marketplace import settings
 UserModel = get_user_model()
 
 
-def send_successful_registration_email(user):
+def sand_successful_registration_email(user):
     html_message = render_to_string(
         'emails/email-greeting.html',
         {'user': user}
     )
 
-    plain_message = strip_tags(html_message)
+    plain_massage = strip_tags(html_message)
+
     send_mail(
         subject='Successful Registration',
-        message=plain_message,
+        message=plain_massage,
         html_message=html_message,
         from_email=settings.EMAIL_HOST_USER,
         recipient_list=(user.email,)
@@ -31,11 +32,13 @@ def send_successful_registration_email(user):
 @receiver(post_save, sender=UserModel)
 def user_created(instance, created, **kwargs):
     if created:
-        send_successful_registration_email(instance)
+        sand_successful_registration_email(instance)
 
 
-@receiver(post_migrate, sender='online_marketplace.products')
+@receiver(post_migrate)
 def add_user_groups(sender, **kwargs):
+    superuser_permissions = Permission.objects.all()
+
     content_type_product = ContentType.objects.get(app_label='products', model='product')
     content_type_category = ContentType.objects.get(app_label='products', model='category')
     content_type_product_image = ContentType.objects.get(app_label='products', model='productimage')
@@ -43,7 +46,10 @@ def add_user_groups(sender, **kwargs):
     content_types = [content_type_product, content_type_category, content_type_product_image]
     staff_permissions = Permission.objects.filter(content_type__in=content_types)
 
+    superuser_group, created = Group.objects.get_or_create(name='Superuser')
+    if created:
+        superuser_group.permissions.set(superuser_permissions)
+
     staff_group, created = Group.objects.get_or_create(name='Staff')
-    if created or not created:
-        existing_permissions = list(staff_group.permissions.all())
-        staff_group.permissions.set(existing_permissions + list(staff_permissions))
+    if created:
+        staff_group.permissions.set(staff_permissions)
