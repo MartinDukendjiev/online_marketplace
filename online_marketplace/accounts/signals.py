@@ -19,7 +19,6 @@ def send_successful_registration_email(user):
     )
 
     plain_message = strip_tags(html_message)
-
     send_mail(
         subject='Successful Registration',
         message=plain_message,
@@ -35,23 +34,16 @@ def user_created(instance, created, **kwargs):
         send_successful_registration_email(instance)
 
 
-@receiver(post_migrate)
+@receiver(post_migrate, sender='online_marketplace.products')
 def add_user_groups(sender, **kwargs):
-    if kwargs.get('app') and kwargs.get('app').name == 'your_app_name':
-        if kwargs.get('created_models'):
-            superuser_permissions = Permission.objects.all()
+    content_type_product = ContentType.objects.get(app_label='products', model='product')
+    content_type_category = ContentType.objects.get(app_label='products', model='category')
+    content_type_product_image = ContentType.objects.get(app_label='products', model='productimage')
 
-            content_type_product = ContentType.objects.get(app_label='products', model='product')
-            content_type_category = ContentType.objects.get(app_label='products', model='category')
-            content_type_subcategory = ContentType.objects.get(app_label='products', model='subcategory')
+    content_types = [content_type_product, content_type_category, content_type_product_image]
+    staff_permissions = Permission.objects.filter(content_type__in=content_types)
 
-            content_types = [content_type_product, content_type_category, content_type_subcategory]
-            staff_permissions = Permission.objects.filter(content_type__in=content_types)
-
-            superuser_group, created = Group.objects.get_or_create(name='Superuser')
-            if created:
-                superuser_group.permissions.set(superuser_permissions)
-
-            staff_group, created = Group.objects.get_or_create(name='Staff')
-            if created:
-                staff_group.permissions.set(staff_permissions)
+    staff_group, created = Group.objects.get_or_create(name='Staff')
+    if created or not created:
+        existing_permissions = list(staff_group.permissions.all())
+        staff_group.permissions.set(existing_permissions + list(staff_permissions))
