@@ -18,41 +18,41 @@
         <div class="form-group">
             <label for="name">Name:</label>
             <input type="text" class="form-control" id="name" placeholder="Add name of the product" name="name"
-                   required>
+                   value="{{ form.name.value|default_if_none:'' }}" required>
         </div>
         <div class="form-group">
             <label for="description">Description:</label>
             <textarea class="form-control" id="description" placeholder="Add description of the product"
-                      name="description" required></textarea>
+                      name="description" required>{{ form.description.value|default_if_none:'' }}</textarea>
         </div>
         <div class="form-group">
             <label for="category">Category:</label>
             <select class="form-control" id="category" name="category" required>
                 {% for category in categories %}
-                    <option value="{{ category.id }}">{{ category.name }}</option>
+                    <option value="{{ category.id }}" {% if category.id == form.category.value %}selected{% endif %}>{{ category.name }}</option>
                 {% endfor %}
             </select>
         </div>
         <div class="form-group">
             <label for="price">Price:</label>
             <input type="number" step="0.01" class="form-control" id="price" placeholder="Add price of the product"
-                   name="price" required>
+                   name="price" value="{{ form.price.value|default_if_none:'' }}" required>
         </div>
         <div class="form-group">
             <label for="phone_number">Phone number:</label>
             <input type="text" class="form-control" id="phone_number" placeholder="Add phone number here"
-                   name="phone_number" required>
+                   name="phone_number" value="{{ form.phone_number.value|default_if_none:'' }}" required>
         </div>
         <div class="form-group">
             <label for="location">Location:</label>
             <input type="text" class="form-control" id="location" placeholder="Location" name="location"
-                   required>
+                   value="{{ form.location.value|default_if_none:'' }}" required>
         </div>
         <div class="form-group">
             <label for="condition">Състояние:</label>
             <select class="form-control" id="condition" name="condition" required>
-                <option value="New">New</option>
-                <option value="Used">Used</option>
+                <option value="New" {% if form.condition.value == "New" %}selected{% endif %}>New</option>
+                <option value="Used" {% if form.condition.value == "Used" %}selected{% endif %}>Used</option>
             </select>
         </div>
         <label for="image">Images:</label>
