@@ -16,10 +16,6 @@ class RegisterUserForm(auth_forms.UserCreationForm):
         return result
 
 
-class LoginUserForm(auth_forms.AuthenticationForm):
-    pass
-
-
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment

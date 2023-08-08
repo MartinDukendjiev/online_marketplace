@@ -6,7 +6,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy, reverse
 from django.views.generic import DetailView, CreateView, UpdateView, DeleteView
 
-from online_marketplace.accounts.forms import RegisterUserForm, CommentForm, RatingForm, LoginUserForm
+from online_marketplace.accounts.forms import RegisterUserForm, CommentForm, RatingForm
 from online_marketplace.accounts.models import Comment, Rating
 from online_marketplace.products.models import Product
 
