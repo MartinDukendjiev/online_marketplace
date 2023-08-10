@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView
 
-from online_marketplace.products.models import Category # SubCategory
+from online_marketplace.products.models import Category
 
 
 class IndexView(TemplateView):

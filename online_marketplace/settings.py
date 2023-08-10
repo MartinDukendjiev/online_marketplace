@@ -140,5 +140,6 @@ EMAIL_USE_SSL = bool(int(os.environ.get('EMAIL_USE_SSL', 0)))
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', None)
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', None)
 
-# Optional: To use a custom display name for sending emails
 EMAIL_FROM = 'GoodsSpotter'
+
+

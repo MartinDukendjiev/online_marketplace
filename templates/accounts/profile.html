@@ -1,6 +1,8 @@
 {% extends 'base/base.html' %}
 {% load static %}
-
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'profile_styles.css' %}">
+{% endblock styles %}
 {% block content %}
 
     <div class="container">
@@ -13,7 +15,7 @@
                 </div>
             {% else %}
                 <div class="col-md-4">
-                    <img src="{% static 'avatar-def.png' %}" alt="Profile image" class="img-fluid rounded-circle">
+                    <img src="{% static 'img/avatar-def.png' %}" alt="Profile image" class="img-fluid rounded-circle">
                 </div>
             {% endif %}
             <div class="col-md-8">
@@ -41,6 +43,8 @@
                     </form>
                 </div>
             </div>
+            {%  elif user_has_rated %}
+            <h4 class="my-5">You already rated this user.</h4>
         {% endif %}
         <hr>
         <!-- Comments section -->
@@ -66,7 +70,7 @@
         {% endif %}
         <hr>
         {% if user.is_authenticated and user != profile %}
-            <form   method="post" action="{% url 'profile details' profile.pk %}">
+            <form method="post" action="{% url 'profile details' profile.pk %}">
                 {% csrf_token %}
                 <div class="form-group">
                     {{ comment_form.text }}

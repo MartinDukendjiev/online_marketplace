@@ -13,8 +13,3 @@ def validate_phone_number(value):
         raise ValidationError(
             "Invalid phone number. The format should be 0xxxxxxxxx."
         )
-
-
-def validate_letters_only(value):
-    if not value.isalpha():
-        raise ValidationError("Invalid name. Only letters are allowed.")
