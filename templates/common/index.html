@@ -21,7 +21,7 @@
                 <div class="col-md-3 mb-4" >
                     <a href="{% url 'product list' %}?category={{ category.id }}"
                        class="text-decoration-none text-body">
-                        <div class="card shadow-sm text-center">
+                        <div class="card  text-center ">
                             <div class="circle-image">
                                 {% if category.image %}
                                     <img src="{{ category.image.url }}" alt="{{ category.name }}">
@@ -30,7 +30,7 @@
                                 {% endif %}
                             </div>
                             <div class="card-body">
-                                <p class="category-name">{{ category.name }}</p>
+                                <p class="category-name ">{{ category.name }}</p>
                             </div>
                         </div>
                     </a>

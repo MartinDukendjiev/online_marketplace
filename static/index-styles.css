@@ -2,6 +2,7 @@
     border: none;
     background-color: transparent;
     box-shadow: none;
+    border-radius: 10px;
     transition: transform 0.3s, box-shadow 0.3s;
 }
 
