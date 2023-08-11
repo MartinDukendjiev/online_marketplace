@@ -40,6 +40,8 @@ class ProductImage(models.Model):
     image = models.ImageField(
         upload_to='products/',
         validators=[image_size_validator_5mb],
+        null=True,
+        blank=True,
     )
     product = models.ForeignKey(Product, related_name='images', on_delete=models.CASCADE)
 

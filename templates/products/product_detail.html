@@ -1,22 +1,22 @@
 {% extends 'base/base.html' %}
+{% load static %}
 
 {% block content %}
     <hr class="my-4">
     <div class="container mt-4">
         <div class="row justify-content-md-center">
-            <div class="col col-lg-12">
+            <div class="col-lg-12">
                 <h2>{{ product.name }}</h2>
             </div>
         </div>
         <div class="row">
-            <div class="col">
-                <div id="productCarousel" class="carousel slide" data-ride="carousel" data-interval="10000">
+            <div class="col-md-8">
+                <div id="productCarousel" class="carousel slide main-product-carousel" data-ride="carousel" data-interval="10000">
                     <div class="carousel-inner">
                         {% for product_image in product.images.all %}
                             <div class="carousel-item {% if forloop.first %}active{% endif %}">
                                 <a href="#" data-toggle="modal" data-target="#imageModal{{ forloop.counter }}">
-                                    <img src="{{ product_image.image.url }}" class="img-fluid"
-                                         style="height: 70vh; object-fit: contain; display: block; margin-left: auto; margin-right: auto;"
+                                    <img src="{{ product_image.image.url }}" class="img-fluid w-100"
                                          alt="{{ product.name }}">
                                 </a>
                             </div>
@@ -44,7 +44,7 @@
                     </div>
                 {% endfor %}
             </div>
-            <div class="col-md-auto">
+            <div class="col-md-4">
                 <dl>
                     <dt>Price:</dt>
                     <dd>{{ product.price }}</dd>
@@ -53,7 +53,6 @@
                     <dt>Phone Number:</dt>
                     <dd>{{ product.phone_number }}</dd>
                     <dt>Uploader:</dt>
-                    <dd>
                     <dd><a href="{% url 'profile details' product.user.id %}">{{ product.user.username }}</a></dd>
                     <dt>Date Uploaded:</dt>
                     <dd>{{ product.upload_date }}</dd>
@@ -61,31 +60,30 @@
                     <dd>{{ product.location }}</dd>
                 </dl>
                 {% if request.user == product.user %}
-                    <a href="{% url 'product update' product.id %}" class="btn btn-warning">Редактирай</a>
-                    <a href="{% url 'product delete' product.id %}" class="btn btn-danger">Изтрий</a>
+                    <a href="{% url 'product update' product.id %}" class="btn btn-warning">Edit</a>
+                    <a href="{% url 'product delete' product.id %}" class="btn btn-danger">Delete</a>
                 {% endif %}
             </div>
         </div>
         <div class="row mt-4">
             <div class="col-lg-12">
-                <p>{{ product.description }}</p>
+                <p class="product-description">{{ product.description }}</p>
             </div>
         </div>
     </div>
     <hr class="my-4">
     <div class="container mt-4">
-        <h3>Подобни продукти</h3>
+        <h3>Similar products</h3>
         <div class="row">
             {% for similar_product in similar_products %}
-                <div class="col-md-3">
-                    <div class="card mb-4 shadow-sm" style="width: 15rem;">
-                        <div id="productCarousel{{ similar_product.pk }}" class="carousel slide"
-                             data-ride="carousel" data-interval="false">
+                <div class="col-md-3 similar-product-col ">
+                    <div class="card mb-4 shadow-sm" style="width: 100%;">
+                        <div id="productCarousel{{ similar_product.pk }}" class="carousel slide similar-product-carousel"
+                             data-ride="carousel" data-interval="10000">
                             <div class="carousel-inner">
                                 {% for image in similar_product.images.all %}
-                                    <div class="carousel-item {% if forloop.first %}active{% endif %} ">
-                                        <img src="{{ image.image.url }}" class="d-block w-100"
-                                             style="height: 25vh; object-fit: contain"
+                                    <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                                        <img src="{{ image.image.url }}" class="img-fluid w-100"
                                              alt="{{ similar_product.name }}">
                                     </div>
                                 {% endfor %}
@@ -93,12 +91,12 @@
                             <a class="carousel-control-prev" href="#productCarousel{{ similar_product.pk }}"
                                role="button" data-slide="prev">
                                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                <span class="sr-only">Предишен</span>
+                                <span class="sr-only">Previous</span>
                             </a>
                             <a class="carousel-control-next" href="#productCarousel{{ similar_product.pk }}"
                                role="button" data-slide="next">
                                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                <span class="sr-only">Следващ</span>
+                                <span class="sr-only">Next</span>
                             </a>
                         </div>
                         <div class="card-body">
@@ -106,7 +104,7 @@
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="btn-group">
                                     <a href="{% url 'product details' similar_product.pk %}"
-                                       class="btn btn-sm btn-outline-secondary">Детайли</a>
+                                       class="btn btn-sm btn-outline-secondary">Details</a>
                                 </div>
                                 <small class="text-muted">{{ similar_product.price }} лв.</small>
                             </div>
@@ -116,4 +114,7 @@
             {% endfor %}
         </div>
         <hr class="my-4">
+{% endblock %}
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'product_details_style.css' %}">
 {% endblock %}

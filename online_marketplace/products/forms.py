@@ -22,11 +22,11 @@ class ProductSearchForm(forms.Form):
 
 
 class ProductImageForm(forms.ModelForm):
-    image = forms.ImageField(label='Image', required=False, widget=forms.ClearableFileInput(attrs={'clearable': False}))
+    image = forms.ImageField(label='Image', required=False)
 
     class Meta:
         model = ProductImage
         fields = '__all__'
 
 
-ProductImageFormSet = inlineformset_factory(Product, ProductImage, form=ProductImageForm, extra=4)
+ProductImageFormSet = inlineformset_factory(Product, ProductImage, form=ProductImageForm, can_delete=True, extra=4)

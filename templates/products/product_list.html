@@ -2,7 +2,9 @@
 {% load static %}
 
 {% block content %}
+
     <div class="container">
+
         <h1 class="mt-5">
             {% if category %}
                 {{ category.name }} Products
@@ -14,12 +16,12 @@
         <form method="get" action="/products/" class="form-inline my-2 my-lg-0">
             <input class="form-control mr-sm-2 w-50" type="text" name="search" placeholder="Search for product"
                    aria-label="Search...">
-            <select class="custom-select mr-sm-2" name="category">
-                <option selected>Search by Category...</option>
-                {% for category in categories %}
-                    <option value="{{ category.id }}">{{ category.name }}</option>
-                {% endfor %}
-            </select>
+                <select class="custom-select mr-sm-2" name="category">
+                    <option selected>Search by Category...</option>
+                    {% for category in categories %}
+                        <option value="{{ category.id }}">{{ category.name }}</option>
+                    {% endfor %}
+                </select>
             <select class="custom-select mr-sm-2" name="sort_by">
                 <option selected>Sort by...</option>
                 <option value="name">Name</option>
@@ -33,7 +35,7 @@
         <hr>
         <div class="row d-flex align-items-stretch">
             {% for product in products %}
-                <div class="col-md-4 d-flex pb-4">
+                <div class="col-lg-4 col-md-6 col-sm-12 d-flex pb-4">
                     <div class="card mb-4 shadow-sm w-100">
                         <div id="productCarousel{{ product.pk }}" class="carousel slide" data-ride="carousel"
                              data-interval="false">
@@ -41,13 +43,13 @@
                                 {% if product.images.all %}
                                     {% for image in product.images.all %}
                                         <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                                            <img src="{{ image.image.url }}" class="d-block w-100"
+                                            <img src="{{ image.image.url }}" class="d-block w-100 product-image"
                                                  style="height: 30vh; object-fit: contain" alt="{{ product.name }}">
                                         </div>
                                     {% endfor %}
                                 {% else %}
                                     <div class="carousel-item active">
-                                        <img src="#" class="d-block w-100"
+                                        <img src="#" class="d-block w-100 product-image"
                                              style="height: 30vh; object-fit: contain" alt="">
                                     </div>
                                 {% endif %}
@@ -77,5 +79,30 @@
                 </div>
             {% endfor %}
         </div>
+        <div class="pagination">
+            <nav>
+                <ul class="pagination">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item"><a class="page-link"
+                                                 href="?{{ request.GET.urlencode|slice:"page=" }}&page={{ page_obj.previous_page_number }}">Previous</a>
+                        </li>
+                    {% endif %}
+                    <li class="page-item disabled"><span
+                            class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+                    </li>
+                    {% if page_obj.has_next %}
+                        <li class="page-item"><a class="page-link"
+                                                 href="?{{ request.GET.urlencode|slice:"page=" }}&page={{ page_obj.next_page_number }}">Next</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+
     </div>
+
 {% endblock content %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'product_list.css' %}">
+{% endblock %}

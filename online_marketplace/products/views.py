@@ -1,4 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import ObjectDoesNotExist
+from django.core.paginator import Paginator
 from django.db.models import Q
 
 from django.http import Http404, HttpResponseRedirect, HttpResponseForbidden
@@ -10,10 +12,19 @@ from online_marketplace.products.forms import ProductForm, ProductSearchForm, Pr
     ProductImageFormSet
 
 
+class ProductAccessMixin:
+    def dispatch(self, request, *args, **kwargs):
+        product = self.get_object()
+        if request.user.is_staff or request.user == product.user:
+            return super().dispatch(request, *args, **kwargs)
+        return HttpResponseForbidden("You do not have permission to edit this product.")
+
+
 class ProductListView(ListView):
     model = Product
     template_name = 'products/product_list.html'
     context_object_name = 'products'
+    paginate_by = 12
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -28,6 +39,9 @@ class ProductListView(ListView):
             queryset = queryset.filter(category__id=category_query)
 
         if sort_by in ['name', 'price', 'upload_date']:
+            order_direction = self.request.GET.get('order_direction', '')
+            if order_direction == 'desc':
+                sort_by = f"-{sort_by}"
             queryset = queryset.order_by(sort_by)
         else:
             queryset = queryset.order_by('-upload_date')
@@ -40,8 +54,18 @@ class ProductListView(ListView):
         context['search_form'] = search_form
         context['categories'] = Category.objects.all().order_by('name')
         context['query_params'] = self.request.GET.urlencode()
-        if 'category' in search_form.data and search_form.data['category'].isdigit():
-            context['category'] = Category.objects.get(id=search_form.data['category'])
+
+        category_id = search_form.data.get('category')
+        if category_id and category_id.isdigit():
+            try:
+                context['category'] = Category.objects.get(id=category_id)
+            except ObjectDoesNotExist:
+                pass
+
+        paginator = Paginator(self.get_queryset(), self.paginate_by)
+        page_number = self.request.GET.get('page')
+        context['page_obj'] = paginator.get_page(page_number)
+
         return context
 
 
@@ -84,16 +108,10 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
         return HttpResponseRedirect(self.get_success_url())
 
 
-class ProductUpdateView(LoginRequiredMixin, UpdateView):
+class ProductUpdateView(LoginRequiredMixin, ProductAccessMixin, UpdateView):
     model = Product
     form_class = ProductUpdateForm
     template_name = 'products/product_update.html'
-
-    def dispatch(self, request, *args, **kwargs):
-        product = self.get_object()
-        if request.user.is_staff or request.user == product.user:
-            return super().dispatch(request, *args, **kwargs)
-        return HttpResponseForbidden("You do not have permission to edit this product.")
 
     def get_success_url(self):
         return reverse('product details', kwargs={'pk': self.object.pk})
@@ -114,6 +132,11 @@ class ProductUpdateView(LoginRequiredMixin, UpdateView):
             self.object = form.save()
             formset.instance = self.object
             formset.save()
+
+            for product_image in self.object.images.all():
+                if not product_image.image:
+                    product_image.delete()
+
             return HttpResponseRedirect(self.get_success_url())
         else:
             return self.render_to_response(self.get_context_data(form=form))
@@ -124,20 +147,13 @@ class ProductUpdateView(LoginRequiredMixin, UpdateView):
         return self.render_to_response(self.get_context_data(form=form))
 
 
-class ProductDeleteView(LoginRequiredMixin, DeleteView):
+class ProductDeleteView(LoginRequiredMixin, ProductAccessMixin, DeleteView):
     model = Product
     template_name = 'products/product_confirm_delete.html'
     success_url = reverse_lazy('product list')
 
-    def dispatch(self, request, *args, **kwargs):
-        product = self.get_object()
-        if request.user.is_staff or request.user == product.user:
-            return super().dispatch(request, *args, **kwargs)
-
-        return HttpResponseForbidden("You do not have permission to edit this product.")
-
     def get_object(self, queryset=None):
         obj = super().get_object(queryset)
-        if obj.user != self.request.user:
+        if obj.user != self.request.user and not self.request.user.is_staff:
             raise Http404()
         return obj

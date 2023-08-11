@@ -78,16 +78,23 @@ class ProfileDetailView(LoginRequiredMixin, DetailView):
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
-        user_rating = Rating.objects.filter(receiver=self.object, reviewer=request.user).first()
 
         if 'delete_comment' in request.POST:
-            comment_id = request.POST.get('comment_id')
-            comment = Comment.objects.filter(pk=comment_id, user=request.user).first()
-            if comment:
-                comment.delete()
-                messages.success(request, 'Your comment has been deleted.')
-                return self.render_to_response(self.get_context_data())
+            self.delete_comment(request)
 
+        self.handle_comment(request)
+        self.handle_rating(request)
+
+        return self.render_to_response(self.get_context_data())
+
+    def delete_comment(self, request):
+        comment_id = request.POST.get('comment_id')
+        comment = Comment.objects.filter(pk=comment_id, user=request.user).first()
+        if comment:
+            comment.delete()
+            messages.success(request, 'Your comment has been deleted.')
+
+    def handle_comment(self, request):
         comment_form = CommentForm(request.POST)
         if comment_form.is_valid():
             comment = comment_form.save(commit=False)
@@ -96,6 +103,8 @@ class ProfileDetailView(LoginRequiredMixin, DetailView):
             comment.save()
             messages.success(request, 'Your comment has been added.')
 
+    def handle_rating(self, request):
+        user_rating = Rating.objects.filter(receiver=self.object, reviewer=request.user).first()
         if not user_rating:
             rating_form = RatingForm(request.POST)
             if rating_form.is_valid():
@@ -104,8 +113,6 @@ class ProfileDetailView(LoginRequiredMixin, DetailView):
                 rating.receiver = self.object
                 rating.save()
                 messages.success(request, 'Your rating has been added.')
-
-        return self.render_to_response(self.get_context_data())
 
 
 class ProfileEditView(LoginRequiredMixin, UpdateView):
@@ -148,41 +155,3 @@ class ProfileDeleteView(LoginRequiredMixin, DeleteView):
 
     def get_success_url(self):
         return reverse('login user')
-
-
-def add_comment(request, pk):
-    profile = get_object_or_404(UserModel, pk=pk)
-
-    if request.method == 'POST':
-        form = CommentForm(request.POST)
-        if form.is_valid():
-            comment = form.save(commit=False)
-            comment.user = request.user
-            comment.seller_profile = profile
-            comment.save()
-            messages.success(request, 'Your comment has been added.')
-            return redirect('profile details', pk=pk)
-
-    else:
-        form = CommentForm()
-
-    return render(request, 'accounts/profile.html', {'profile': profile, 'comment_form': form})
-
-
-def add_rating(request, pk):
-    profile = get_object_or_404(UserModel, pk=pk)
-
-    if request.method == 'POST':
-        form = RatingForm(request.POST)
-        if form.is_valid():
-            rating = form.save(commit=False)
-            rating.reviewer = request.user
-            rating.receiver = profile
-            rating.save()
-            messages.success(request, 'Your rating has been added.')
-            return redirect('profile details', pk=pk)
-
-    else:
-        form = RatingForm()
-
-    return render(request, 'accounts/profile.html', {'profile': profile, 'rating_form': form})
