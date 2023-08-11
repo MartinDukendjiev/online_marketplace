@@ -62,7 +62,7 @@
 
 .banner-image {
     width: 100%;
-    max-height: 300px;
+    max-height: 600px;
     object-fit: cover;
     border-radius: 20px;
 }
@@ -85,4 +85,9 @@
 
 .banner-button:hover {
     background-color: #e68a00;
+}
+
+body {
+    background-color: azure;
+    margin-top:  30px;
 }

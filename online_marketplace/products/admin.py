@@ -9,7 +9,7 @@ class ProductAdmin(admin.ModelAdmin):
 
 
 class ProductImageAdmin(admin.ModelAdmin):
-    list_display = ('image', 'product')
+    list_display = ('product', 'image')
     list_filter = ('product',)
     search_fields = ('product',)
 

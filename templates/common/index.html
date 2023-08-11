@@ -6,14 +6,14 @@
 
     <div class="banner">
         <img src="{% static 'img/index-baner.png' %}" alt="Banner Image" class="banner-image">
-        <a href="{% url 'product list' %}" class="btn btn-primary banner-button">Виж всички продукти</a>
+        <a href="{% url 'product list' %}" class="btn btn-primary banner-button">Show All Products</a>
     </div>
     <div class="container">
-        <h1 class="mt-5">Списък с категории</h1>
+        <h1 class="mt-5">All Categories</h1>
         <form method="get" class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="text" name="search" placeholder="Търсене..."
-                   aria-label="Търсене...">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Търси</button>
+            <input class="form-control mr-sm-2" type="text" name="search" placeholder="Search for Category..."
+                   aria-label="Search...">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
         </form>
         <hr>
         <div class="row">
@@ -31,9 +31,9 @@
                             </div>
                             <div class="card-body">
                                 <p class="category-name">{{ category.name }}</p>
-                                <div class="d-flex justify-content-center">
-                                    <span class="btn btn-sm btn-outline-success">Покажи всички продукти</span>
-                                </div>
+{#                                <div class="d-flex justify-content-center">#}
+{#                                    <span class="btn btn-sm btn-outline-success">Show All Category Products</span>#}
+{#                                </div>#}
                             </div>
                         </div>
                     </a>
