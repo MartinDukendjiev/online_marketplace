@@ -2,7 +2,8 @@ from django.contrib import messages
 from django.contrib.auth import login, get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LogoutView, LoginView, PasswordChangeView, PasswordChangeDoneView
-from django.shortcuts import get_object_or_404, redirect, render
+from django.http import Http404
+from django.shortcuts import redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import DetailView, CreateView, UpdateView, DeleteView
 
@@ -11,6 +12,12 @@ from online_marketplace.accounts.models import Comment, Rating
 from online_marketplace.products.models import Product
 
 UserModel = get_user_model()
+
+
+class UserMatchMixin:
+    def check_user_match(self, user_object):
+        if self.request.user != user_object:
+            raise Http404("You are not allowed to perform this action.")
 
 
 class OnlyAnonymousMixin:
@@ -34,17 +41,15 @@ class UserRegisterView(OnlyAnonymousMixin, CreateView):
     def form_invalid(self, form):
         return super().form_invalid(form)
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['next'] = self.request.GET.get('next', '')
-        return context
-
-    def get_success_url(self):
-        return self.request.POST.get('next', self.success_url)
-
 
 class UserLoginView(LoginView):
     template_name = 'accounts/login.html'
+
+    def get_success_url(self):
+        next_url = self.request.POST.get('next', None)
+        if next_url:
+            return next_url
+        return reverse_lazy('index')
 
 
 class UserLogoutView(LoginRequiredMixin, LogoutView):
@@ -115,21 +120,26 @@ class ProfileDetailView(LoginRequiredMixin, DetailView):
                 messages.success(request, 'Your rating has been added.')
 
 
-class ProfileEditView(LoginRequiredMixin, UpdateView):
+class ProfileEditView(LoginRequiredMixin, UserMatchMixin, UpdateView):
     model = UserModel
     template_name = 'accounts/profile-edit-page.html'
     fields = ['first_name', 'last_name', 'email', 'avatar']
 
+    def get_object(self, queryset=None):
+        obj = super().get_object(queryset)
+        self.check_user_match(obj)
+        return obj
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['profile'] = self.get_object()
+        context['profile'] = self.object
         return context
 
     def get_success_url(self):
         return reverse('profile details', kwargs={'pk': self.object.pk})
 
 
-class ProfilePasswordChangeView(PasswordChangeView):
+class ProfilePasswordChangeView(LoginRequiredMixin, UserMatchMixin, PasswordChangeView):
     template_name = 'accounts/change_password.html'
     success_url = 'change-password/done/'
 
@@ -138,12 +148,17 @@ class ProfilePasswordChangeView(PasswordChangeView):
         context['profile'] = self.request.user
         return context
 
+    def get_object(self, queryset=None):
+        obj = super().get_object(queryset)
+        self.check_user_match(obj)
+        return obj
+
 
 class ProfilePasswordChangeDoneView(PasswordChangeDoneView):
     template_name = 'accounts/password_change_done.html'
 
 
-class ProfileDeleteView(LoginRequiredMixin, DeleteView):
+class ProfileDeleteView(LoginRequiredMixin, UserMatchMixin, DeleteView):
     model = UserModel
     template_name = 'accounts/profile-delete-page.html'
     success_url = reverse_lazy('index')
@@ -155,3 +170,8 @@ class ProfileDeleteView(LoginRequiredMixin, DeleteView):
 
     def get_success_url(self):
         return reverse('login user')
+
+    def get_object(self, queryset=None):
+        obj = super().get_object(queryset)
+        self.check_user_match(obj)
+        return obj
