@@ -141,7 +141,6 @@ class ProfileEditView(LoginRequiredMixin, UserMatchMixin, UpdateView):
 
 class ProfilePasswordChangeView(LoginRequiredMixin, UserMatchMixin, PasswordChangeView):
     template_name = 'accounts/change_password.html'
-    success_url = 'change-password/done/'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -152,6 +151,9 @@ class ProfilePasswordChangeView(LoginRequiredMixin, UserMatchMixin, PasswordChan
         obj = super().get_object(queryset)
         self.check_user_match(obj)
         return obj
+
+    def get_success_url(self):
+        return reverse_lazy('password change done', kwargs={'pk': self.request.user.pk})
 
 
 class ProfilePasswordChangeDoneView(PasswordChangeDoneView):

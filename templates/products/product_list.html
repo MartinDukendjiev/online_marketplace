@@ -5,7 +5,7 @@
 
     <div class="container">
 
-        <h1 class="mt-5">
+         <h1 class="mt-5">
             {% if category %}
                 {{ category.name }} Products
             {% else %}
@@ -14,23 +14,26 @@
         </h1>
 
         <form method="get" action="/products/" class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2 w-50" type="text" name="search" placeholder="Search for product"
+            <input class="form-control mr-sm-2 w-auto" type="text" name="search" placeholder="Search for product"
                    aria-label="Search...">
-                <select class="custom-select mr-sm-2" name="category">
-                    <option selected>Search by Category...</option>
-                    {% for category in categories %}
-                        <option value="{{ category.id }}">{{ category.name }}</option>
-                    {% endfor %}
-                </select>
+            <select class="custom-select mr-sm-2" name="category">
+                <option selected>Search by Category...</option>
+                {% for category in categories %}
+                    <option value="{{ category.id }}">{{ category.name }}</option>
+                {% endfor %}
+            </select>
             <select class="custom-select mr-sm-2" name="sort_by">
                 <option selected>Sort by...</option>
                 <option value="name">Name</option>
                 <option value="price">Price</option>
                 <option value="upload_date">Upload date</option>
             </select>
+            <select class="custom-select mr-sm-2" name="order_direction">
+                <option selected>Order by...</option>
+                <option value="asc">Ascending</option>
+                <option value="desc">Descending</option>
+            </select>
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-
-
         </form>
         <hr>
         <div class="row d-flex align-items-stretch">
@@ -84,7 +87,7 @@
                 <ul class="pagination">
                     {% if page_obj.has_previous %}
                         <li class="page-item"><a class="page-link"
-                                                 href="?{{ request.GET.urlencode|slice:"page=" }}&page={{ page_obj.previous_page_number }}">Previous</a>
+                                                 href="?{{ request.GET.urlencode|slice:"&page=" }}&page={{ page_obj.previous_page_number }}">Previous</a>
                         </li>
                     {% endif %}
                     <li class="page-item disabled"><span
@@ -92,7 +95,7 @@
                     </li>
                     {% if page_obj.has_next %}
                         <li class="page-item"><a class="page-link"
-                                                 href="?{{ request.GET.urlencode|slice:"page=" }}&page={{ page_obj.next_page_number }}">Next</a>
+                                                 href="?{{ request.GET.urlencode|slice:"&page=" }}&page={{ page_obj.next_page_number }}">Next</a>
                         </li>
                     {% endif %}
                 </ul>
