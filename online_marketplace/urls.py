@@ -11,3 +11,6 @@ urlpatterns = [
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+handler404 = 'online_marketplace.common.views.error_404'
+handler500 = 'online_marketplace.common.views.error_500'

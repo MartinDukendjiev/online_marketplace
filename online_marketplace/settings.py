@@ -141,5 +141,3 @@ EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', None)
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', None)
 
 EMAIL_FROM = 'GoodsSpotter'
-
-
