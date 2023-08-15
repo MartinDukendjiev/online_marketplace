@@ -1,0 +1,75 @@
+.product-description {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.similar-product-carousel .carousel-inner {
+    overflow: hidden;
+}
+
+.similar-product-carousel .carousel-item img {
+    object-fit: contain;
+    max-height: 100%;
+    width: auto;
+}
+
+.main-product-carousel .carousel-inner {
+    overflow: hidden;
+}
+
+.main-product-carousel .carousel-item img {
+    object-fit: contain;
+    width: auto;
+}
+
+@media (max-width: 575px) {
+    .similar-product-col {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+
+    .main-product-carousel .carousel-item img {
+        max-height: 30vh;
+    }
+}
+
+@media (min-width: 576px) and (max-width: 767px) {
+    .similar-product-col {
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+
+    .main-product-carousel .carousel-item img {
+        max-height: 40vh;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+    .similar-product-col {
+        flex: 0 0 33%;
+        max-width: 33%;
+    }
+
+    .main-product-carousel .carousel-item img {
+        max-height: 40vh;
+    }
+
+    .similar-product-carousel .carousel-inner {
+        height: 150px;
+    }
+}
+
+@media (min-width: 992px) {
+    .similar-product-col {
+        flex: 0 0 25%;
+        max-width: 25%;
+    }
+
+    .main-product-carousel .carousel-item img {
+        max-height: 50vh;
+    }
+
+    .similar-product-carousel .carousel-inner {
+        height: 200px;
+    }
+}
