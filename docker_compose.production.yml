@@ -1,0 +1,51 @@
+# For deployment:
+# 1. Package application in Docker image
+# 2. Push docker image into Docker hub
+# 3. Pull Docker image inside the server
+# 4. Start application using the new image on the server
+
+
+
+
+version: '3.4'
+
+services:
+
+  web:
+    image: martindukendjiev/online_marketplace:2023_08
+    build:
+      context: .
+      dockerfile: Dockerfile
+    platform: linux/amd64
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./envs/.env
+    volumes:
+      - /tmp/for_deploy/static:/app/static
+  postgres:
+    image: postgres
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: 1123QwER
+      POSTGRES_USER: postgres
+      POSTGRES_DB: demo_db
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - ./postgresql:/var/lib/postgresql/data
+
+  nginx:
+    image: nginx
+    ports:
+      - "81:80"
+      - "443:443"
+    volumes:
+      - /tmp/for_deploy/static:/home/app/web/staticfiles
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/logs:/var/log/nginx
+      - ./certbot/www:/var/www/certbot/:ro
+      - ./certbot/conf/:/etc/nginx/ssl/:ro
+    links:
+      - web

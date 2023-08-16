@@ -1,1 +1,3 @@
-'online_marketplace/envs'
+'.envs'
+'requirements.txt'
+'postgresql'
