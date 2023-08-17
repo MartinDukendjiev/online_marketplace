@@ -13,9 +13,6 @@ services:
 
   web:
     image: marto1003/online_marketplace:2023_08
-    build:
-      context: .
-      dockerfile: Dockerfile
 
     ports:
       - "8000:8000"
@@ -44,7 +41,7 @@ services:
   nginx:
     image: nginx
     ports:
-      - "80:80"
+      - "81:80"
       - "443:443"
     volumes:
       - /tmp/app-resources/static:/home/app/web/staticfiles
