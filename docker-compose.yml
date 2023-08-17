@@ -34,9 +34,9 @@ services:
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_PASSWORD: os.environ.get('POSTGRES_PASSWORD')
-      POSTGRES_USER: os.environ.get('POSTGRES_USER')
-      POSTGRES_DB: os.environ.get('POSTGRES_DB')
+      POSTGRES_PASSWORD: Taralej
+      POSTGRES_USER: postgres-user
+      POSTGRES_DB: marketplace_db
       PGDATA: /var/lib/postgresql/data
     volumes:
       - ./postgresql:/var/lib/postgresql/data
@@ -47,7 +47,7 @@ services:
       - "81:80"
       - "443:443"
     volumes:
-      - /tmp/for_deploy/static:/home/app/web/staticfiles
+      - /tmp/app-resources/static:/home/app/web/staticfiles
       - ./nginx/conf.d:/etc/nginx/conf.d
       - ./nginx/logs:/var/log/nginx
       - ./certbot/www:/var/www/certbot/:ro
