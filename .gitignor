@@ -1,2 +1,3 @@
 '.envs'
 'postgresql'
+'docker_compose.yml'
