@@ -44,7 +44,7 @@ services:
   nginx:
     image: nginx
     ports:
-      - "81:80"
+      - "80:80"
       - "443:443"
     volumes:
       - /tmp/app-resources/static:/home/app/web/staticfiles
@@ -54,3 +54,4 @@ services:
       - ./certbot/conf/:/etc/nginx/ssl/:ro
     links:
       - web
+
