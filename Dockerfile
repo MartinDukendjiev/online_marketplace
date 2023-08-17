@@ -8,5 +8,10 @@ COPY requirements.txt /app/
 
 RUN pip install -r requirements.txt
 
-COPY . /app/
+COPY manage.py /app/manage.py
+COPY static /app/static
+COPY media /app/media
+COPY templates /app/templates
+COPY online_marketplace /app/online_marketplace
+
 
